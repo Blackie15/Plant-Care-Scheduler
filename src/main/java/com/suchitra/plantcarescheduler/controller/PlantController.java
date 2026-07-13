@@ -24,8 +24,7 @@ public class PlantController {
     private final PlantService plantService;
     private final PlantMapper plantMapper;
 
-    public PlantController(PlantService plantService,
-                           PlantMapper plantMapper) {
+    public PlantController(PlantService plantService, PlantMapper plantMapper) {
         this.plantService = plantService;
         this.plantMapper = plantMapper;
     }

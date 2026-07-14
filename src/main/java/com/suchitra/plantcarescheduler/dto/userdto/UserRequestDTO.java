@@ -32,7 +32,4 @@ public class UserRequestDTO {
 
     private String notificationPreferences;
 
-    public String getUsername() {
-    return username;
-}
 }

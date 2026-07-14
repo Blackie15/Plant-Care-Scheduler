@@ -3,7 +3,6 @@ package com.suchitra.plantcarescheduler.service;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.suchitra.plantcarescheduler.entity.EnvironmentData;
@@ -15,14 +14,17 @@ import com.suchitra.plantcarescheduler.repository.PlantRepository;
 @Service
 public class EnvironmentDataService {
 
-    @Autowired
-    private EnvironmentDataRepository environmentDataRepository;
+    private final EnvironmentDataRepository environmentDataRepository;
 
-    @Autowired
-    private PlantRepository plantRepository;
+    private final PlantRepository plantRepository;
 
-    @Autowired
-    private EnvironmentDataMapper environmentDataMapper;
+    private final EnvironmentDataMapper environmentDataMapper;
+
+    EnvironmentDataService(EnvironmentDataRepository environmentDataRepository, PlantRepository plantRepository, EnvironmentDataMapper environmentDataMapper) {
+        this.environmentDataRepository = environmentDataRepository;
+        this.plantRepository = plantRepository;
+        this.environmentDataMapper = environmentDataMapper;
+    }
 
     // Add Environment Data
     public EnvironmentData addEnvironmentData(EnvironmentData environmentData) {

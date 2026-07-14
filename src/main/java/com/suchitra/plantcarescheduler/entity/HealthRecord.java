@@ -1,6 +1,6 @@
 package com.suchitra.plantcarescheduler.entity;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -36,7 +36,7 @@ public class HealthRecord {
 
     @NotNull(message = "Assessment date is required")
     @Column(name = "assessment_date", nullable = false)
-    private LocalDate assessmentDate;
+    private LocalDateTime assessmentDate;
 
     @NotBlank(message = "Overall health is required")
     @Column(name = "overall_health", nullable = false)
@@ -61,7 +61,7 @@ public class HealthRecord {
     private String notes;
 
     @Column(name = "follow_up_date")
-    private LocalDate followUpDate;
+    private LocalDateTime followUpDate;
 
     @Column(name = "recovery_status")
     private String recoveryStatus;

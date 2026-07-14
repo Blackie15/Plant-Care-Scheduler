@@ -39,6 +39,9 @@ public class Comment {
     @Column(name = "created_date")
     private LocalDateTime createdDate = LocalDateTime.now();
 
+    @Column(name = "updated_date")
+    private LocalDateTime updatedDate;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id", nullable = false)
     @JsonIgnoreProperties({"comments"})

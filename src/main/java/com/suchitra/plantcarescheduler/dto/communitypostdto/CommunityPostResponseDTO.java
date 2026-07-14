@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 public class CommunityPostResponseDTO {
 
-    private Long id;
+    private Long postId;
 
     private Long userId;
 

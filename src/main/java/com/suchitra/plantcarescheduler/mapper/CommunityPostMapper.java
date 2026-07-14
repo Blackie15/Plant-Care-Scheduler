@@ -26,7 +26,7 @@ public class CommunityPostMapper {
 
         CommunityPostResponseDTO dto = new CommunityPostResponseDTO();
 
-        dto.setId(post.getPostId());
+        dto.setPostId(post.getPostId());
 
         dto.setUserId(
                 post.getUser() != null

@@ -68,26 +68,26 @@ public class SpeciesMapper {
     }
 
     // Update existing entity
-    public void updateEntity(Species species, SpeciesRequestDTO requestDTO) {
+    public void updateEntity(Species existingSpecies, Species updatedSpecies) {
 
-        species.setCommonName(requestDTO.getCommonName());
-        species.setScientificName(requestDTO.getScientificName());
-        species.setFamilyName(requestDTO.getFamilyName());
-        species.setCareDifficulty(requestDTO.getCareDifficulty());
-        species.setLightRequirements(requestDTO.getLightRequirements());
-        species.setWaterFrequencyDays(requestDTO.getWaterFrequencyDays());
-        species.setHumidityMin(requestDTO.getHumidityMin());
-        species.setHumidityMax(requestDTO.getHumidityMax());
-        species.setTemperatureMinCelsius(requestDTO.getTemperatureMinCelsius());
-        species.setTemperatureMaxCelsius(requestDTO.getTemperatureMaxCelsius());
-        species.setSoilPhMin(requestDTO.getSoilPhMin());
-        species.setSoilPhMax(requestDTO.getSoilPhMax());
-        species.setGrowthRate(requestDTO.getGrowthRate());
-        species.setMaxHeightCm(requestDTO.getMaxHeightCm());
-        species.setFertilizerFrequencyDays(requestDTO.getFertilizerFrequencyDays());
-        species.setPruningFrequencyDays(requestDTO.getPruningFrequencyDays());
-        species.setRepottingFrequencyMonths(requestDTO.getRepottingFrequencyMonths());
-        species.setCommonIssues(requestDTO.getCommonIssues());
-        species.setCareTips(requestDTO.getCareTips());
+        existingSpecies.setCommonName(updatedSpecies.getCommonName());
+        existingSpecies.setScientificName(updatedSpecies.getScientificName());
+        existingSpecies.setFamilyName(updatedSpecies.getFamilyName());
+        existingSpecies.setCareDifficulty(updatedSpecies.getCareDifficulty());
+        existingSpecies.setLightRequirements(updatedSpecies.getLightRequirements());
+        existingSpecies.setWaterFrequencyDays(updatedSpecies.getWaterFrequencyDays());
+        existingSpecies.setHumidityMin(updatedSpecies.getHumidityMin());
+        existingSpecies.setHumidityMax(updatedSpecies.getHumidityMax());
+        existingSpecies.setTemperatureMinCelsius(updatedSpecies.getTemperatureMinCelsius());
+        existingSpecies.setTemperatureMaxCelsius(updatedSpecies.getTemperatureMaxCelsius());
+        existingSpecies.setSoilPhMin(updatedSpecies.getSoilPhMin());
+        existingSpecies.setSoilPhMax(updatedSpecies.getSoilPhMax());
+        existingSpecies.setGrowthRate(updatedSpecies.getGrowthRate());
+        existingSpecies.setMaxHeightCm(updatedSpecies.getMaxHeightCm());
+        existingSpecies.setFertilizerFrequencyDays(updatedSpecies.getFertilizerFrequencyDays());
+        existingSpecies.setPruningFrequencyDays(updatedSpecies.getPruningFrequencyDays());
+        existingSpecies.setRepottingFrequencyMonths(updatedSpecies.getRepottingFrequencyMonths());
+        existingSpecies.setCommonIssues(updatedSpecies.getCommonIssues());
+        existingSpecies.setCareTips(updatedSpecies.getCareTips());
     }
 }

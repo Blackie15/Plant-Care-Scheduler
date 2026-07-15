@@ -1,5 +1,6 @@
 package com.suchitra.plantcarescheduler.service;
 
+import com.suchitra.plantcarescheduler.mapper.SpeciesMapper;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -11,10 +12,12 @@ import com.suchitra.plantcarescheduler.repository.SpeciesRepository;
 @Service
 public class SpeciesService {
 
+    private final SpeciesMapper speciesMapper;
     private final SpeciesRepository speciesRepository;
 
-    public SpeciesService(SpeciesRepository speciesRepository) {
+    public SpeciesService(SpeciesRepository speciesRepository, SpeciesMapper speciesMapper) {
         this.speciesRepository = speciesRepository;
+        this.speciesMapper = speciesMapper;
     }
 
     // Add Species
@@ -48,26 +51,7 @@ public class SpeciesService {
         Species existingSpecies = speciesRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Species not found"));
 
-        existingSpecies.setCommonName(species.getCommonName());
-        existingSpecies.setScientificName(species.getScientificName());
-        existingSpecies.setFamilyName(species.getFamilyName());
-        existingSpecies.setCareDifficulty(species.getCareDifficulty());
-        existingSpecies.setLightRequirements(species.getLightRequirements());
-        existingSpecies.setWaterFrequencyDays(species.getWaterFrequencyDays());
-        existingSpecies.setHumidityMin(species.getHumidityMin());
-        existingSpecies.setHumidityMax(species.getHumidityMax());
-        existingSpecies.setTemperatureMinCelsius(species.getTemperatureMinCelsius());
-        existingSpecies.setTemperatureMaxCelsius(species.getTemperatureMaxCelsius());
-        existingSpecies.setSoilPhMin(species.getSoilPhMin());
-        existingSpecies.setSoilPhMax(species.getSoilPhMax());
-        existingSpecies.setGrowthRate(species.getGrowthRate());
-        existingSpecies.setMaxHeightCm(species.getMaxHeightCm());
-        existingSpecies.setFertilizerFrequencyDays(species.getFertilizerFrequencyDays());
-        existingSpecies.setPruningFrequencyDays(species.getPruningFrequencyDays());
-        existingSpecies.setRepottingFrequencyMonths(species.getRepottingFrequencyMonths());
-        existingSpecies.setCommonIssues(species.getCommonIssues());
-        existingSpecies.setCareTips(species.getCareTips());
-
+        speciesMapper.updateEntity(existingSpecies, species);
         return speciesRepository.save(existingSpecies);
     }
 

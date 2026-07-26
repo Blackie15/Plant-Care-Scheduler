@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.suchitra.plantcarescheduler.entity.Notification;
 import com.suchitra.plantcarescheduler.entity.User;
+import com.suchitra.plantcarescheduler.exception.ResourceNotFoundException;
 import com.suchitra.plantcarescheduler.repository.NotificationRepository;
 import com.suchitra.plantcarescheduler.repository.UserRepository;
 
@@ -27,7 +28,7 @@ public class NotificationService {
         Long userId = notification.getUser().getId();
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + userId));
 
         notification.setUser(user);
 
@@ -48,7 +49,7 @@ public class NotificationService {
     public List<Notification> getNotificationsByUserId(Long userId) {
 
         if (!userRepository.existsById(userId)) {
-            throw new RuntimeException("User not found with id: " + userId);
+            throw new ResourceNotFoundException("User not found with id: " + userId);
         }
 
         return notificationRepository.findByUserId(userId);
@@ -58,7 +59,7 @@ public class NotificationService {
     public Notification markAsRead(Long id) {
 
         Notification notification = notificationRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Notification not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Notification not found with id: " + id));
 
         notification.setIsRead(true);
 
@@ -69,7 +70,7 @@ public class NotificationService {
     public void deleteNotification(Long id) {
 
         if (!notificationRepository.existsById(id)) {
-            throw new RuntimeException("Notification not found with id: " + id);
+            throw new ResourceNotFoundException("Notification not found with id: " + id);
         }
 
         notificationRepository.deleteById(id);

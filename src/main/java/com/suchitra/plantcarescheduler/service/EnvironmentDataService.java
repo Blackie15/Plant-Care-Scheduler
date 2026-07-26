@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.suchitra.plantcarescheduler.entity.EnvironmentData;
 import com.suchitra.plantcarescheduler.entity.Plant;
+import com.suchitra.plantcarescheduler.exception.ResourceNotFoundException;
 import com.suchitra.plantcarescheduler.mapper.EnvironmentDataMapper;
 import com.suchitra.plantcarescheduler.repository.EnvironmentDataRepository;
 import com.suchitra.plantcarescheduler.repository.PlantRepository;
@@ -32,7 +33,7 @@ public class EnvironmentDataService {
         Long plantId = environmentData.getPlant().getId();
 
         Plant plant = plantRepository.findById(plantId)
-                .orElseThrow(() -> new RuntimeException("Plant not found with id: " + plantId));
+                .orElseThrow(() -> new ResourceNotFoundException("Plant not found with id: " + plantId));
 
         environmentData.setPlant(plant);
 
@@ -53,7 +54,7 @@ public class EnvironmentDataService {
     public List<EnvironmentData> getEnvironmentDataByPlantId(Long plantId) {
 
         if (!plantRepository.existsById(plantId)) {
-            throw new RuntimeException("Plant not found with id: " + plantId);
+            throw new ResourceNotFoundException("Plant not found with id: " + plantId);
         }
 
         return environmentDataRepository.findByPlantId(plantId);
@@ -63,12 +64,12 @@ public class EnvironmentDataService {
     public EnvironmentData updateEnvironmentData(Long id, EnvironmentData updatedData) {
 
         EnvironmentData existingData = environmentDataRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Environment data not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Environment data not found with id: " + id));
 
         Long plantId = updatedData.getPlant().getId();
 
         Plant plant = plantRepository.findById(plantId)
-                .orElseThrow(() -> new RuntimeException("Plant not found with id: " + plantId));
+                .orElseThrow(() -> new ResourceNotFoundException("Plant not found with id: " + plantId));
 
         updatedData.setPlant(plant);
 
@@ -81,7 +82,7 @@ public class EnvironmentDataService {
     public void deleteEnvironmentData(Long id) {
 
         if (!environmentDataRepository.existsById(id)) {
-            throw new RuntimeException("Environment data not found with id: " + id);
+            throw new ResourceNotFoundException("Environment data not found with id: " + id);
         }
 
         environmentDataRepository.deleteById(id);

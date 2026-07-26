@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import com.suchitra.plantcarescheduler.entity.Plant;
 import com.suchitra.plantcarescheduler.entity.Species;
 import com.suchitra.plantcarescheduler.entity.User;
+import com.suchitra.plantcarescheduler.exception.ResourceNotFoundException;
+import com.suchitra.plantcarescheduler.exception.UserNotFoundException;
 import com.suchitra.plantcarescheduler.mapper.PlantMapper;
 import com.suchitra.plantcarescheduler.repository.PlantRepository;
 import com.suchitra.plantcarescheduler.repository.SpeciesRepository;
@@ -35,10 +37,10 @@ public class PlantService {
     public Plant addPlant(Plant plant, Long ownerId, Long speciesId) {
 
         User owner = userRepository.findById(ownerId)
-                .orElseThrow(() -> new RuntimeException("Owner not found"));
+                .orElseThrow(() -> new UserNotFoundException("Owner not found with id: " + ownerId));
 
         Species species = speciesRepository.findById(speciesId)
-                .orElseThrow(() -> new RuntimeException("Species not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Species not found with id: " + speciesId));
 
         plant.setOwner(owner);
         plant.setSpecies(species);
@@ -52,7 +54,7 @@ public class PlantService {
     public Plant getPlantById(Long id) {
 
         return plantRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Plant not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Plant not found with id: " + id));
     }
 
     // Get All Plants
@@ -65,13 +67,13 @@ public class PlantService {
     public Plant updatePlant(Long id, Plant plant, Long ownerId, Long speciesId) {
 
         Plant existingPlant = plantRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Plant not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Plant not found with id: " + id));
 
         User owner = userRepository.findById(ownerId)
-                .orElseThrow(() -> new RuntimeException("Owner not found"));
+                .orElseThrow(() -> new UserNotFoundException("Owner not found with id: " + ownerId));
 
         Species species = speciesRepository.findById(speciesId)
-                .orElseThrow(() -> new RuntimeException("Species not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Species not found with id: " + speciesId));
 
         plantMapper.updateEntity(existingPlant, plant);
 
@@ -86,7 +88,7 @@ public class PlantService {
     public void deletePlant(Long id) {
 
         Plant plant = plantRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Plant not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Plant not found with id: " + id));
 
         plantRepository.delete(plant);
     }

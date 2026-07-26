@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.suchitra.plantcarescheduler.entity.HealthRecord;
 import com.suchitra.plantcarescheduler.entity.Plant;
+import com.suchitra.plantcarescheduler.exception.ResourceNotFoundException;
 import com.suchitra.plantcarescheduler.mapper.HealthRecordMapper;
 import com.suchitra.plantcarescheduler.repository.HealthRecordRepository;
 import com.suchitra.plantcarescheduler.repository.PlantRepository;
@@ -32,8 +33,7 @@ public class HealthRecordService {
         Long plantId = healthRecord.getPlant().getId();
 
         Plant plant = plantRepository.findById(plantId)
-                .orElseThrow(() -> new RuntimeException("Plant not found with id: " + plantId));
-
+                .orElseThrow(() -> new ResourceNotFoundException("Plant not found with id: " + plantId));
         healthRecord.setPlant(plant);
 
         return healthRecordRepository.save(healthRecord);
@@ -53,7 +53,7 @@ public class HealthRecordService {
     public List<HealthRecord> getHealthRecordsByPlantId(Long plantId) {
 
         if (!plantRepository.existsById(plantId)) {
-            throw new RuntimeException("Plant not found with id: " + plantId);
+            throw new ResourceNotFoundException("Plant not found with id: " + plantId);
         }
 
         return healthRecordRepository.findByPlantId(plantId);
@@ -63,12 +63,12 @@ public class HealthRecordService {
     public HealthRecord updateHealthRecord(Long id, HealthRecord updatedRecord) {
 
         HealthRecord existingRecord = healthRecordRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Health record not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Health record not found with id: " + id));
 
         Long plantId = updatedRecord.getPlant().getId();
 
         Plant plant = plantRepository.findById(plantId)
-                .orElseThrow(() -> new RuntimeException("Plant not found with id: " + plantId));
+                .orElseThrow(() -> new ResourceNotFoundException("Plant not found with id: " + plantId));
 
         updatedRecord.setPlant(plant);
 
@@ -80,10 +80,9 @@ public class HealthRecordService {
     // Delete Health Record
     public void deleteHealthRecord(Long id) {
 
-        if (!healthRecordRepository.existsById(id)) {
-            throw new RuntimeException("Health record not found with id: " + id);
-        }
+        HealthRecord healthRecord = healthRecordRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Health record not found with id: " + id));
 
-        healthRecordRepository.deleteById(id);
+        healthRecordRepository.delete(healthRecord);
     }
 }

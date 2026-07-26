@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.suchitra.plantcarescheduler.entity.CommunityPost;
 import com.suchitra.plantcarescheduler.entity.User;
+import com.suchitra.plantcarescheduler.exception.ResourceNotFoundException;
 import com.suchitra.plantcarescheduler.mapper.CommunityPostMapper;
 import com.suchitra.plantcarescheduler.repository.CommunityPostRepository;
 import com.suchitra.plantcarescheduler.repository.UserRepository;
@@ -35,7 +36,7 @@ public class CommunityPostService {
         Long userId = post.getUser().getId();
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + userId));
 
         post.setUser(user);
 
@@ -56,7 +57,7 @@ public class CommunityPostService {
     public List<CommunityPost> getPostsByUserId(Long userId) {
 
         if (!userRepository.existsById(userId)) {
-            throw new RuntimeException("User not found with id: " + userId);
+            throw new ResourceNotFoundException("User not found with id: " + userId);
         }
 
         return communityPostRepository.findByUserId(userId);
@@ -71,12 +72,12 @@ public class CommunityPostService {
     public CommunityPost updatePost(Long id, CommunityPost updatedPost) {
 
         CommunityPost existingPost = communityPostRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Community post not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Community post not found with id: " + id));
 
         Long userId = updatedPost.getUser().getId();
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + userId));
 
         updatedPost.setUser(user);
 
@@ -89,7 +90,7 @@ public class CommunityPostService {
     public void deletePost(Long id) {
 
         if (!communityPostRepository.existsById(id)) {
-            throw new RuntimeException("Community post not found with id: " + id);
+            throw new ResourceNotFoundException("Community post not found with id: " + id);
         }
 
         communityPostRepository.deleteById(id);

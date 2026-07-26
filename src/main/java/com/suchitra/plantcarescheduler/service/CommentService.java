@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.suchitra.plantcarescheduler.entity.Comment;
 import com.suchitra.plantcarescheduler.entity.CommunityPost;
 import com.suchitra.plantcarescheduler.entity.User;
+import com.suchitra.plantcarescheduler.exception.ResourceNotFoundException;
 import com.suchitra.plantcarescheduler.mapper.CommentMapper;
 import com.suchitra.plantcarescheduler.repository.CommentRepository;
 import com.suchitra.plantcarescheduler.repository.CommunityPostRepository;
@@ -43,13 +44,13 @@ public class CommentService {
         Long postId = comment.getPost().getPostId();
 
         CommunityPost post = communityPostRepository.findById(postId)
-                .orElseThrow(() -> new RuntimeException("Post not found with id: " + postId));
+                .orElseThrow(() -> new ResourceNotFoundException("Post not found with id: " + postId));
 
 
         Long userId = comment.getUser().getId();
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + userId));
 
 
         comment.setPost(post);
@@ -77,7 +78,7 @@ public class CommentService {
     public List<Comment> getCommentsByPostId(Long postId) {
 
         if (!communityPostRepository.existsById(postId)) {
-            throw new RuntimeException("Post not found with id: " + postId);
+            throw new ResourceNotFoundException("Post not found with id: " + postId);
         }
 
         return commentRepository.findByPostPostId(postId);
@@ -88,7 +89,7 @@ public class CommentService {
     public List<Comment> getCommentsByUserId(Long userId) {
 
         if (!userRepository.existsById(userId)) {
-            throw new RuntimeException("User not found with id: " + userId);
+            throw new ResourceNotFoundException("User not found with id: " + userId);
         }
 
         return commentRepository.findByUserId(userId);
@@ -99,19 +100,19 @@ public class CommentService {
     public Comment updateComment(Long id, Comment updatedComment) {
 
         Comment existingComment = commentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Comment not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Comment not found with id: " + id));
 
 
         Long postId = updatedComment.getPost().getPostId();
 
         CommunityPost post = communityPostRepository.findById(postId)
-                .orElseThrow(() -> new RuntimeException("Post not found with id: " + postId));
+                .orElseThrow(() -> new ResourceNotFoundException("Post not found with id: " + postId));
 
 
         Long userId = updatedComment.getUser().getId();
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + userId));
 
 
         updatedComment.setPost(post);
@@ -128,7 +129,7 @@ public class CommentService {
     public void deleteComment(Long id) {
 
         if (!commentRepository.existsById(id)) {
-            throw new RuntimeException("Comment not found with id: " + id);
+            throw new ResourceNotFoundException("Comment not found with id: " + id);
         }
 
         commentRepository.deleteById(id);

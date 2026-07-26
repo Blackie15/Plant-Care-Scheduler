@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import com.suchitra.plantcarescheduler.dto.userdto.LoginRequestDTO;
 import com.suchitra.plantcarescheduler.dto.userdto.UserRequestDTO;
 import com.suchitra.plantcarescheduler.dto.userdto.UserResponseDTO;
 import com.suchitra.plantcarescheduler.entity.User;
@@ -28,32 +27,6 @@ public class UserController {
     public UserController(UserService userService, UserMapper userMapper) {
         this.userService = userService;
         this.userMapper = userMapper;
-    }
-
-    // Register User
-    @PostMapping("/register")
-    public ResponseEntity<UserResponseDTO> registerUser(
-            @Valid @RequestBody UserRequestDTO requestDTO) {
-
-        User user = userMapper.toEntity(requestDTO);
-
-        User savedUser = userService.registerUser(user);
-
-        return new ResponseEntity<>(
-                userMapper.toResponseDTO(savedUser),
-                HttpStatus.CREATED);
-    }
-
-    // Login User
-    @PostMapping("/login")
-    public ResponseEntity<UserResponseDTO> loginUser(
-            @Valid @RequestBody LoginRequestDTO loginRequestDTO) {
-
-        User user = userService.loginUser(
-                loginRequestDTO.getEmail(),
-                loginRequestDTO.getPassword());
-
-        return ResponseEntity.ok(userMapper.toResponseDTO(user));
     }
 
     // Get User By Id

@@ -1,4 +1,4 @@
-package com.suchitra.plantcarescheduler.dto.userdto;
+package com.suchitra.plantcarescheduler.dto.authenticationdto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class LoginRequestDTO {
+public class AuthenticationRequestDTO {
 
     @Email(message = "Enter a valid email")
     @NotBlank(message = "Email is required")
@@ -17,5 +17,4 @@ public class LoginRequestDTO {
 
     @NotBlank(message = "Password is required")
     private String password;
-
 }

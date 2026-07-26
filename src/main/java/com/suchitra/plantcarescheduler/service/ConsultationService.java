@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.suchitra.plantcarescheduler.entity.Consultation;
 import com.suchitra.plantcarescheduler.entity.User;
+import com.suchitra.plantcarescheduler.exception.ResourceNotFoundException;
 import com.suchitra.plantcarescheduler.mapper.ConsultationMapper;
 import com.suchitra.plantcarescheduler.repository.ConsultationRepository;
 import com.suchitra.plantcarescheduler.repository.UserRepository;
@@ -34,7 +35,7 @@ public class ConsultationService {
         Long userId = consultation.getUser().getId();
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + userId));
 
         consultation.setUser(user);
 
@@ -43,7 +44,7 @@ public class ConsultationService {
             Long specialistId = consultation.getSpecialist().getId();
 
             User specialist = userRepository.findById(specialistId)
-                    .orElseThrow(() -> new RuntimeException("Specialist not found with id: " + specialistId));
+                    .orElseThrow(() -> new ResourceNotFoundException("Specialist not found with id: " + specialistId));
 
             consultation.setSpecialist(specialist);
         }
@@ -65,7 +66,7 @@ public class ConsultationService {
     public List<Consultation> getConsultationsByUserId(Long userId) {
 
         if (!userRepository.existsById(userId)) {
-            throw new RuntimeException("User not found with id: " + userId);
+            throw new ResourceNotFoundException("User not found with id: " + userId);
         }
 
         return consultationRepository.findByUserId(userId);
@@ -75,7 +76,7 @@ public class ConsultationService {
     public List<Consultation> getConsultationsBySpecialistId(Long specialistId) {
 
         if (!userRepository.existsById(specialistId)) {
-            throw new RuntimeException("Specialist not found with id: " + specialistId);
+            throw new ResourceNotFoundException("Specialist not found with id: " + specialistId);
         }
 
         return consultationRepository.findBySpecialistId(specialistId);
@@ -90,12 +91,12 @@ public class ConsultationService {
     public Consultation updateConsultation(Long consultationId, Consultation updatedConsultation) {
 
         Consultation existingConsultation = consultationRepository.findById(consultationId)
-                .orElseThrow(() -> new RuntimeException("Consultation not found with id: " + consultationId));
+                .orElseThrow(() -> new ResourceNotFoundException("Consultation not found with id: " + consultationId));
 
         Long userId = updatedConsultation.getUser().getId();
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + userId));
 
         updatedConsultation.setUser(user);
 
@@ -104,7 +105,7 @@ public class ConsultationService {
             Long specialistId = updatedConsultation.getSpecialist().getId();
 
             User specialist = userRepository.findById(specialistId)
-                    .orElseThrow(() -> new RuntimeException("Specialist not found with id: " + specialistId));
+                    .orElseThrow(() -> new ResourceNotFoundException("Specialist not found with id: " + specialistId));
 
             updatedConsultation.setSpecialist(specialist);
         }
@@ -118,7 +119,7 @@ public class ConsultationService {
     public void deleteConsultation(Long consultationId) {
 
         if (!consultationRepository.existsById(consultationId)) {
-            throw new RuntimeException("Consultation not found with id: " + consultationId);
+            throw new ResourceNotFoundException("Consultation not found with id: " + consultationId);
         }
 
         consultationRepository.deleteById(consultationId);

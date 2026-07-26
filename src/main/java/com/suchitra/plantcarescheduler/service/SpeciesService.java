@@ -7,6 +7,8 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.suchitra.plantcarescheduler.entity.Species;
+import com.suchitra.plantcarescheduler.exception.ResourceNotFoundException;
+import com.suchitra.plantcarescheduler.exception.ScientificNameAlreadyExistsException;
 import com.suchitra.plantcarescheduler.repository.SpeciesRepository;
 
 @Service
@@ -24,7 +26,7 @@ public class SpeciesService {
     public Species addSpecies(Species species) {
 
         if (speciesRepository.findByScientificName(species.getScientificName()).isPresent()) {
-            throw new RuntimeException("Scientific name already exists");
+            throw new ScientificNameAlreadyExistsException("Scientific name already exists: " + species.getScientificName());
         }
 
         species.setCreatedDate(LocalDateTime.now());
@@ -36,7 +38,7 @@ public class SpeciesService {
     public Species getSpeciesById(Long id) {
 
         return speciesRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Species not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Species not found with id: " + id));
     }
 
     // Get All Species
@@ -49,7 +51,7 @@ public class SpeciesService {
     public Species updateSpecies(Long id, Species species) {
 
         Species existingSpecies = speciesRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Species not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Species not found with id: " + id));
 
         speciesMapper.updateEntity(existingSpecies, species);
         return speciesRepository.save(existingSpecies);
@@ -59,7 +61,7 @@ public class SpeciesService {
     public void deleteSpecies(Long id) {
 
         Species species = speciesRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Species not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Species not found with id: " + id));
 
         speciesRepository.delete(species);
     }

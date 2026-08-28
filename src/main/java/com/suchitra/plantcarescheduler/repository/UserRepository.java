@@ -19,4 +19,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     // Check whether a username already exists.
     boolean existsByUsername(String username);
 
+    // Find users by role
+    java.util.List<User> findByRole(com.suchitra.plantcarescheduler.entity.Role role);
 }

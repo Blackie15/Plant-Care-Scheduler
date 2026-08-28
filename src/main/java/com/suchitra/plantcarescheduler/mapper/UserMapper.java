@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import com.suchitra.plantcarescheduler.dto.userdto.UserRequestDTO;
 import com.suchitra.plantcarescheduler.dto.userdto.UserResponseDTO;
 import com.suchitra.plantcarescheduler.entity.User;
+import com.suchitra.plantcarescheduler.entity.Role;
 
 @Component
 public class UserMapper {
@@ -17,7 +18,7 @@ public class UserMapper {
         user.setUsername(requestDTO.getUsername());
         user.setEmail(requestDTO.getEmail());
         user.setPasswordHash(requestDTO.getPassword());
-        user.setRole(requestDTO.getRole());
+        user.setRole(Role.valueOf(requestDTO.getRole().toUpperCase()));
         user.setLocation(requestDTO.getLocation());
         user.setGardeningExperience(requestDTO.getGardeningExperience());
         user.setTimezone(requestDTO.getTimezone());
@@ -49,14 +50,29 @@ public class UserMapper {
 
     // Update existing entity
     public void updateEntity(User existingUser, User updatedUser) {
-
-        existingUser.setUsername(updatedUser.getUsername());
-        existingUser.setEmail(updatedUser.getEmail());
-        existingUser.setPasswordHash(updatedUser.getPasswordHash());
-        existingUser.setRole(updatedUser.getRole());
-        existingUser.setLocation(updatedUser.getLocation());
-        existingUser.setGardeningExperience(updatedUser.getGardeningExperience());
-        existingUser.setTimezone(updatedUser.getTimezone());
-        existingUser.setNotificationPreferences(updatedUser.getNotificationPreferences());
+        if (updatedUser.getUsername() != null && !updatedUser.getUsername().isBlank()) {
+            existingUser.setUsername(updatedUser.getUsername());
+        }
+        if (updatedUser.getEmail() != null && !updatedUser.getEmail().isBlank()) {
+            existingUser.setEmail(updatedUser.getEmail());
+        }
+        if (updatedUser.getPasswordHash() != null && !updatedUser.getPasswordHash().isBlank()) {
+            existingUser.setPasswordHash(updatedUser.getPasswordHash());
+        }
+        if (updatedUser.getRole() != null) {
+            existingUser.setRole(updatedUser.getRole());
+        }
+        if (updatedUser.getLocation() != null) {
+            existingUser.setLocation(updatedUser.getLocation());
+        }
+        if (updatedUser.getGardeningExperience() != null) {
+            existingUser.setGardeningExperience(updatedUser.getGardeningExperience());
+        }
+        if (updatedUser.getTimezone() != null) {
+            existingUser.setTimezone(updatedUser.getTimezone());
+        }
+        if (updatedUser.getNotificationPreferences() != null) {
+            existingUser.setNotificationPreferences(updatedUser.getNotificationPreferences());
+        }
     }
 }

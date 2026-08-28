@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import com.suchitra.plantcarescheduler.dto.userdto.UserProfileUpdateDTO;
 import com.suchitra.plantcarescheduler.dto.userdto.UserRequestDTO;
 import com.suchitra.plantcarescheduler.dto.userdto.UserResponseDTO;
 import com.suchitra.plantcarescheduler.entity.User;
@@ -50,15 +51,25 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
 
+    // Get All Specialists
+    @GetMapping("/specialists")
+    public ResponseEntity<List<UserResponseDTO>> getSpecialists() {
+
+        List<UserResponseDTO> specialists = userService.getSpecialists()
+                .stream()
+                .map(userMapper::toResponseDTO)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(specialists);
+    }
+
     // Update User
     @PutMapping("/{id}")
     public ResponseEntity<UserResponseDTO> updateUser(
             @PathVariable Long id,
-            @Valid @RequestBody UserRequestDTO requestDTO) {
+            @Valid @RequestBody UserProfileUpdateDTO requestDTO) {
 
-        User user = userMapper.toEntity(requestDTO);
-
-        User updatedUser = userService.updateUser(id, user);
+        User updatedUser = userService.updateUserById(id, requestDTO);
 
         return ResponseEntity.ok(userMapper.toResponseDTO(updatedUser));
     }

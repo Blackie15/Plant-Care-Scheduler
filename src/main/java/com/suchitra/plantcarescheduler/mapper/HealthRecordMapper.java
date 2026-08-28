@@ -45,6 +45,12 @@ public class HealthRecordMapper {
 
         if (record.getPlant() != null) {
             dto.setPlantId(record.getPlant().getId());
+            dto.setPlantNickname(record.getPlant().getNickname());
+        }
+
+        if (record.getSpecialist() != null) {
+            dto.setSpecialistId(record.getSpecialist().getId());
+            dto.setSpecialistName(record.getSpecialist().getUsername());
         }
 
         return dto;

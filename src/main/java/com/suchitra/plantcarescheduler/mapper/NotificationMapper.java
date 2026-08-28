@@ -32,7 +32,9 @@ public class NotificationMapper {
         NotificationResponseDTO responseDTO = new NotificationResponseDTO();
 
         responseDTO.setNotificationId(notification.getNotificationId());
-        responseDTO.setUserId(notification.getUser().getId());
+        if (notification.getUser() != null) {
+            responseDTO.setUserId(notification.getUser().getId());
+        }
         responseDTO.setTitle(notification.getTitle());
         responseDTO.setMessage(notification.getMessage());
         responseDTO.setNotificationType(notification.getNotificationType());

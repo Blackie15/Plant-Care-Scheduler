@@ -33,5 +33,7 @@ public class CareTaskResponseDTO {
 
     private Long completedById;
 
+    private String plantNickname;
+
     private LocalDateTime createdDate;
 }

@@ -33,7 +33,10 @@ public class EnvironmentDataMapper {
         EnvironmentDataResponseDTO responseDTO = new EnvironmentDataResponseDTO();
 
         responseDTO.setId(environmentData.getId());
-        responseDTO.setPlantId(environmentData.getPlant().getId());
+        if (environmentData.getPlant() != null) {
+            responseDTO.setPlantId(environmentData.getPlant().getId());
+            responseDTO.setPlantNickname(environmentData.getPlant().getNickname());
+        }
         responseDTO.setLocationId(environmentData.getLocationId());
         responseDTO.setSensorId(environmentData.getSensorId());
         responseDTO.setTemperatureCelsius(environmentData.getTemperatureCelsius());

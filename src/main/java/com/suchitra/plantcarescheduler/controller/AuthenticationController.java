@@ -6,8 +6,10 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.security.core.Authentication;
 import com.suchitra.plantcarescheduler.dto.authenticationdto.AuthenticationRequestDTO;
 import com.suchitra.plantcarescheduler.dto.authenticationdto.AuthenticationResponseDTO;
+import com.suchitra.plantcarescheduler.dto.userdto.UserProfileUpdateDTO;
 import com.suchitra.plantcarescheduler.dto.userdto.UserRequestDTO;
 import com.suchitra.plantcarescheduler.dto.userdto.UserResponseDTO;
 import com.suchitra.plantcarescheduler.entity.User;
@@ -60,5 +62,32 @@ public class AuthenticationController {
         String token = jwtService.generateToken(request.getEmail());
 
         return ResponseEntity.ok(new AuthenticationResponseDTO(token));
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<UserResponseDTO> getCurrentUser(
+            Authentication authentication) {
+
+        String email = authentication.getName();
+
+        User user = userService.getUserByEmail(email);
+
+        return ResponseEntity.ok(
+                userMapper.toResponseDTO(user)
+        );
+    }
+
+    @PutMapping("/me")
+    public ResponseEntity<UserResponseDTO> updateProfile(
+            Authentication authentication,
+            @Valid @RequestBody UserProfileUpdateDTO updateDTO) {
+
+        String email = authentication.getName();
+
+        User updatedUser = userService.updateUserProfile(email, updateDTO);
+
+        return ResponseEntity.ok(
+                userMapper.toResponseDTO(updatedUser)
+        );
     }
 }

@@ -28,10 +28,10 @@ public class CommunityPostMapper {
 
         dto.setPostId(post.getPostId());
 
-        dto.setUserId(
-                post.getUser() != null
-                        ? post.getUser().getId()
-                        : null);
+        if (post.getUser() != null) {
+            dto.setUserId(post.getUser().getId());
+            dto.setUsername(post.getUser().getUsername());
+        }
 
         dto.setTitle(post.getTitle());
         dto.setDescription(post.getDescription());

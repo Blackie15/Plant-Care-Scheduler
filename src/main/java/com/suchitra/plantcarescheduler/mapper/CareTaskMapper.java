@@ -35,6 +35,7 @@ public class CareTaskMapper {
 
         if (task.getPlant() != null) {
             responseDTO.setPlantId(task.getPlant().getId());
+            responseDTO.setPlantNickname(task.getPlant().getNickname());
         }
 
         responseDTO.setTaskType(task.getTaskType());

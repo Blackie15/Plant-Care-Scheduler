@@ -1,0 +1,192 @@
+/* Luxury Botanical Species Library Styling */
+.species-page {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    padding-bottom: 40px;
+}
+
+/* Header */
+.species-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    background: linear-gradient(135deg, #0d2818 0%, #143621 100%);
+    border: 1px solid rgba(212, 163, 115, 0.25);
+    padding: 32px 36px;
+    border-radius: 18px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+.species-tagline {
+    display: block;
+    font-size: 11.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #d4a373;
+    margin-bottom: 6px;
+}
+
+.species-title-wrap h1 {
+    margin: 0 0 6px 0;
+    font-size: 30px;
+    font-weight: 700;
+    color: #ffffff;
+    font-family: var(--font-serif);
+}
+
+.species-title-wrap p {
+    margin: 0;
+    font-size: 14px;
+    color: #b7e4c7;
+}
+
+.add-species-btn {
+    background: #d4a373;
+    color: #081c15;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 30px;
+    font-size: 13.5px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(212, 163, 115, 0.3);
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.add-species-btn:hover {
+    background: #e9c46a;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(212, 163, 115, 0.4);
+}
+
+/* Grid */
+.species-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 22px;
+}
+
+.species-card {
+    background: #0d2818;
+    background: linear-gradient(135deg, rgba(13, 40, 24, 0.9) 0%, rgba(20, 54, 38, 0.8) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    transition: all 0.22s ease;
+}
+
+.species-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(212, 163, 115, 0.4);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5), 0 0 18px rgba(212, 163, 115, 0.12);
+}
+
+.species-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.species-names h3 {
+    margin: 0;
+    font-size: 19px;
+    font-weight: 700;
+    font-family: var(--font-serif);
+    color: #ffffff;
+}
+
+.species-scientific {
+    margin: 2px 0 0 0;
+    font-size: 13px;
+    color: #d4a373;
+    font-style: italic;
+}
+
+.species-family {
+    display: inline-block;
+    margin-top: 4px;
+    font-size: 11px;
+    color: #80a58e;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.difficulty-badge {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.difficulty-easy {
+    background: rgba(82, 183, 136, 0.18);
+    color: #95d5b2;
+    border: 1px solid rgba(82, 183, 136, 0.4);
+}
+
+.difficulty-medium {
+    background: rgba(233, 196, 106, 0.18);
+    color: #e9c46a;
+    border: 1px solid rgba(233, 196, 106, 0.4);
+}
+
+.difficulty-hard {
+    background: rgba(248, 113, 113, 0.18);
+    color: #f87171;
+    border: 1px solid rgba(248, 113, 113, 0.4);
+}
+
+.species-specs-table {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    background: rgba(8, 28, 21, 0.5);
+    padding: 12px 14px;
+    border-radius: 10px;
+}
+
+.spec-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.spec-item-label {
+    font-size: 10.5px;
+    font-weight: 600;
+    color: #80a58e;
+    text-transform: uppercase;
+}
+
+.spec-item-val {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: #e2e8f0;
+}
+
+.species-card-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 14px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+@media (max-width: 768px) {
+    .species-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 18px;
+        padding: 24px;
+    }
+}

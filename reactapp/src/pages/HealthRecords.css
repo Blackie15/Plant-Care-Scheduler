@@ -1,0 +1,304 @@
+/* Luxury Botanical Health Records & Diagnosis Styling */
+.health-page {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    padding-bottom: 40px;
+}
+
+/* Header */
+.health-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    background: linear-gradient(135deg, #0d2818 0%, #143621 100%);
+    border: 1px solid rgba(212, 163, 115, 0.25);
+    padding: 32px 36px;
+    border-radius: 18px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+.health-tagline {
+    display: block;
+    font-size: 11.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #d4a373;
+    margin-bottom: 6px;
+}
+
+.health-title-wrap h1 {
+    margin: 0 0 6px 0;
+    font-size: 30px;
+    font-weight: 700;
+    color: #ffffff;
+    font-family: var(--font-serif);
+}
+
+.health-title-wrap p {
+    margin: 0;
+    font-size: 14px;
+    color: #b7e4c7;
+}
+
+.add-health-btn {
+    background: #d4a373;
+    color: #081c15;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 30px;
+    font-size: 13.5px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(212, 163, 115, 0.3);
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.add-health-btn:hover {
+    background: #e9c46a;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(212, 163, 115, 0.4);
+}
+
+/* Metrics Grid */
+.health-metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+}
+
+.health-stat-card {
+    background: #0d2818;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    padding: 18px 22px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+}
+
+.health-stat-card:hover {
+    border-color: rgba(212, 163, 115, 0.4);
+    transform: translateY(-2px);
+}
+
+.health-stat-card.active {
+    background: linear-gradient(135deg, rgba(20, 54, 38, 0.9) 0%, rgba(13, 40, 24, 0.95) 100%);
+    border-color: #d4a373;
+    box-shadow: 0 0 16px rgba(212, 163, 115, 0.2);
+}
+
+.health-stat-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-num {
+    font-family: var(--font-serif);
+    font-size: 26px;
+    font-weight: 700;
+    color: #e9c46a;
+    line-height: 1.1;
+}
+
+.stat-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #cbd5e1;
+    margin-top: 4px;
+}
+
+/* Controls */
+.health-controls {
+    display: flex;
+    gap: 16px;
+}
+
+/* Health Records Grid */
+.health-records-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 22px;
+}
+
+.health-card {
+    background: #0d2818;
+    background: linear-gradient(135deg, rgba(13, 40, 24, 0.9) 0%, rgba(20, 54, 38, 0.8) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    transition: all 0.22s ease;
+}
+
+.health-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(212, 163, 115, 0.4);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5), 0 0 18px rgba(212, 163, 115, 0.12);
+}
+
+.health-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.health-card-plant h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+    font-family: var(--font-serif);
+    color: #ffffff;
+}
+
+.health-card-date {
+    font-size: 12px;
+    color: #80a58e;
+}
+
+.health-card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex: 1;
+}
+
+.status-badges-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.health-tag {
+    font-size: 11.5px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 20px;
+    text-transform: uppercase;
+}
+
+.tag-healthy {
+    background: rgba(82, 183, 136, 0.18);
+    color: #95d5b2;
+    border: 1px solid rgba(82, 183, 136, 0.4);
+}
+
+.tag-fair {
+    background: rgba(233, 196, 106, 0.18);
+    color: #e9c46a;
+    border: 1px solid rgba(233, 196, 106, 0.4);
+}
+
+.tag-poor,
+.tag-critical {
+    background: rgba(248, 113, 113, 0.18);
+    color: #f87171;
+    border: 1px solid rgba(248, 113, 113, 0.4);
+}
+
+.recovery-tag {
+    font-size: 11.5px;
+    font-weight: 600;
+    color: #cbd5e1;
+    background: rgba(255, 255, 255, 0.06);
+    padding: 3px 10px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.health-detail-block {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    background: rgba(8, 28, 21, 0.4);
+    padding: 8px 12px;
+    border-radius: 8px;
+}
+
+.detail-label {
+    font-size: 10.5px;
+    font-weight: 600;
+    color: #80a58e;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.detail-text,
+.symptoms-text,
+.treatment-text {
+    font-size: 12.5px;
+    color: #e2e8f0;
+    line-height: 1.4;
+}
+
+.treatment-text {
+    color: #95d5b2;
+}
+
+.follow-up-pill {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: #e9c46a;
+    background: rgba(212, 163, 115, 0.1);
+    padding: 6px 10px;
+    border-radius: 6px;
+}
+
+.health-card-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: auto;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.health-btn-action {
+    background: rgba(255, 255, 255, 0.06);
+    color: #cbd5e1;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.health-btn-action:hover {
+    background: #d4a373;
+    border-color: #d4a373;
+    color: #081c15;
+}
+
+.health-btn-action.delete:hover {
+    background: #dc2626;
+    border-color: #dc2626;
+    color: #ffffff;
+}
+
+@media (max-width: 768px) {
+    .health-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 18px;
+        padding: 24px;
+    }
+
+    .health-metrics-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .health-controls {
+        flex-direction: column;
+    }
+}

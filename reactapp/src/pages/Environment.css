@@ -1,0 +1,220 @@
+/* Luxury Botanical Environment & Sensors Styling */
+.environment-page {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    padding-bottom: 40px;
+}
+
+/* Header */
+.environment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    background: linear-gradient(135deg, #0d2818 0%, #143621 100%);
+    border: 1px solid rgba(212, 163, 115, 0.25);
+    padding: 32px 36px;
+    border-radius: 18px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+.env-tagline {
+    display: block;
+    font-size: 11.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #d4a373;
+    margin-bottom: 6px;
+}
+
+.environment-title-wrap h1 {
+    margin: 0 0 6px 0;
+    font-size: 30px;
+    font-weight: 700;
+    color: #ffffff;
+    font-family: var(--font-serif);
+}
+
+.environment-title-wrap p {
+    margin: 0;
+    font-size: 14px;
+    color: #b7e4c7;
+}
+
+.log-env-btn {
+    background: #d4a373;
+    color: #081c15;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 30px;
+    font-size: 13.5px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(212, 163, 115, 0.3);
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.log-env-btn:hover {
+    background: #e9c46a;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(212, 163, 115, 0.4);
+}
+
+/* Metrics Overview Grid */
+.env-metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+}
+
+.env-metric-card {
+    background: #0d2818;
+    background: linear-gradient(135deg, rgba(13, 40, 24, 0.9) 0%, rgba(20, 54, 38, 0.8) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    padding: 18px 22px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+    transition: all 0.2s ease;
+}
+
+.env-metric-card:hover {
+    border-color: rgba(212, 163, 115, 0.3);
+    transform: translateY(-2px);
+}
+
+.env-metric-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.env-metric-val {
+    font-family: var(--font-serif);
+    font-size: 24px;
+    font-weight: 700;
+    color: #e9c46a;
+    line-height: 1.1;
+}
+
+.env-metric-sub {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: #cbd5e1;
+    margin-top: 4px;
+}
+
+/* Records Grid */
+.env-records-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 22px;
+}
+
+.env-card {
+    background: #0d2818;
+    background: linear-gradient(135deg, rgba(13, 40, 24, 0.9) 0%, rgba(20, 54, 38, 0.8) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    transition: all 0.22s ease;
+}
+
+.env-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(212, 163, 115, 0.4);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5), 0 0 18px rgba(212, 163, 115, 0.12);
+}
+
+.env-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.env-plant-pill {
+    font-size: 15px;
+    font-weight: 700;
+    font-family: var(--font-serif);
+    color: #ffffff;
+}
+
+.env-sensor-tag {
+    font-size: 11px;
+    font-weight: 600;
+    color: #d4a373;
+    background: rgba(212, 163, 115, 0.15);
+    padding: 2px 8px;
+    border-radius: 12px;
+    border: 1px solid rgba(212, 163, 115, 0.25);
+}
+
+.env-gauges-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    background: rgba(8, 28, 21, 0.5);
+    padding: 12px 14px;
+    border-radius: 10px;
+}
+
+.env-gauge-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.env-gauge-label {
+    font-size: 10.5px;
+    font-weight: 600;
+    color: #80a58e;
+    text-transform: uppercase;
+}
+
+.env-gauge-val {
+    font-size: 14px;
+    font-weight: 700;
+    color: #e9c46a;
+}
+
+.env-timestamp {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: #80a58e;
+    padding-top: 4px;
+}
+
+.env-card-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: auto;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+@media (max-width: 1024px) {
+    .env-metrics-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .environment-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 18px;
+        padding: 24px;
+    }
+
+    .env-metrics-grid {
+        grid-template-columns: 1fr;
+    }
+}

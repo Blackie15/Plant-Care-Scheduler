@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import com.suchitra.plantcarescheduler.entity.Role;
 
 @Data
 @NoArgsConstructor
@@ -17,7 +18,7 @@ public class UserResponseDTO {
 
     private String email;
 
-    private String role;
+    private Role role;
 
     private Boolean isActive;
 

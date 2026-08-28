@@ -1,0 +1,104 @@
+/* Global Design Tokens & Luxury Botanical Theme */
+:root {
+  /* Fonts */
+  --font-serif: 'Playfair Display', Georgia, serif;
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  /* Color Palette: Dark Emerald & Forest Green */
+  --bg-deep: #081c15;
+  --bg-dark: #0d2818;
+  --bg-surface: #112d1f;
+  --bg-surface-elevated: #163826;
+  --bg-card: rgba(17, 45, 31, 0.75);
+  --bg-card-hover: rgba(22, 56, 38, 0.85);
+  --bg-glass: rgba(255, 255, 255, 0.05);
+
+  /* Gold Accents & Highlights */
+  --gold-primary: #d4a373;
+  --gold-light: #e9c46a;
+  --gold-hover: #e7c875;
+  --gold-dark: #b5835a;
+  --gold-border: rgba(212, 163, 115, 0.35);
+  --gold-glow: rgba(212, 163, 115, 0.2);
+
+  /* Botanical Greens */
+  --green-accent: #2d6a4f;
+  --green-bright: #52b788;
+  --green-light: #95d5b2;
+  --green-sage: #b7e4c7;
+  --green-mint: #d8f3dc;
+
+  /* Text Colors */
+  --text-pure: #ffffff;
+  --text-primary: #f1f5f9;
+  --text-secondary: #cbd5e1;
+  --text-sage: #b7e4c7;
+  --text-muted: #80a58e;
+
+  /* Borders & Shadows */
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-emerald: rgba(82, 183, 136, 0.2);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.25);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.45);
+  --shadow-gold: 0 4px 20px rgba(212, 163, 115, 0.25);
+
+  /* Status Colors */
+  --status-success: #52b788;
+  --status-warning: #e9c46a;
+  --status-danger: #f87171;
+  --status-info: #60a5fa;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100%;
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-color: #081c15;
+  background-image: 
+    linear-gradient(rgba(8, 28, 21, 0.45), rgba(8, 28, 21, 0.65)),
+    url('./assets/botanical-bg.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+h1, h2, h3, h4, .serif-heading {
+  font-family: var(--font-serif);
+  letter-spacing: -0.01em;
+  color: var(--text-pure);
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-deep);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--green-accent);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--gold-primary);
+}

@@ -39,14 +39,15 @@ public class ConsultationService {
 
         consultation.setUser(user);
 
-        if (consultation.getSpecialist() != null) {
+        if (consultation.getSpecialist() != null && consultation.getSpecialist().getId() != null) {
 
             Long specialistId = consultation.getSpecialist().getId();
 
-            User specialist = userRepository.findById(specialistId)
-                    .orElseThrow(() -> new ResourceNotFoundException("Specialist not found with id: " + specialistId));
+            User specialist = userRepository.findById(specialistId).orElse(null);
 
             consultation.setSpecialist(specialist);
+        } else {
+            consultation.setSpecialist(null);
         }
 
         return consultationRepository.save(consultation);
@@ -100,14 +101,15 @@ public class ConsultationService {
 
         updatedConsultation.setUser(user);
 
-        if (updatedConsultation.getSpecialist() != null) {
+        if (updatedConsultation.getSpecialist() != null && updatedConsultation.getSpecialist().getId() != null) {
 
             Long specialistId = updatedConsultation.getSpecialist().getId();
 
-            User specialist = userRepository.findById(specialistId)
-                    .orElseThrow(() -> new ResourceNotFoundException("Specialist not found with id: " + specialistId));
+            User specialist = userRepository.findById(specialistId).orElse(null);
 
             updatedConsultation.setSpecialist(specialist);
+        } else {
+            updatedConsultation.setSpecialist(null);
         }
 
         consultationMapper.updateEntity(existingConsultation, updatedConsultation);

@@ -31,15 +31,15 @@ public class ConsultationMapper {
 
         dto.setConsultationId(consultation.getConsultationId());
 
-        dto.setUserId(
-                consultation.getUser() != null
-                        ? consultation.getUser().getId()
-                        : null);
+        if (consultation.getUser() != null) {
+            dto.setUserId(consultation.getUser().getId());
+            dto.setUserName(consultation.getUser().getUsername());
+        }
 
-        dto.setSpecialistId(
-                consultation.getSpecialist() != null
-                        ? consultation.getSpecialist().getId()
-                        : null);
+        if (consultation.getSpecialist() != null) {
+            dto.setSpecialistId(consultation.getSpecialist().getId());
+            dto.setSpecialistName(consultation.getSpecialist().getUsername());
+        }
 
         dto.setRequestDate(consultation.getRequestDate());
         dto.setAppointmentDate(consultation.getAppointmentDate());

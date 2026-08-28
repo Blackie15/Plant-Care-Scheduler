@@ -34,10 +34,10 @@ public class CommentMapper {
                         ? comment.getPost().getPostId()
                         : null);
 
-        dto.setUserId(
-                comment.getUser() != null
-                        ? comment.getUser().getId()
-                        : null);
+        if (comment.getUser() != null) {
+            dto.setUserId(comment.getUser().getId());
+            dto.setUsername(comment.getUser().getUsername());
+        }
 
         dto.setComment(comment.getComment());
         dto.setCreatedDate(comment.getCreatedDate());

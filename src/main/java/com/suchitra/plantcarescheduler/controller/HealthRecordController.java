@@ -12,32 +12,45 @@ import com.suchitra.plantcarescheduler.dto.healthrecorddto.HealthRecordRequestDT
 import com.suchitra.plantcarescheduler.dto.healthrecorddto.HealthRecordResponseDTO;
 import com.suchitra.plantcarescheduler.entity.HealthRecord;
 import com.suchitra.plantcarescheduler.entity.Plant;
+import com.suchitra.plantcarescheduler.entity.User;
 import com.suchitra.plantcarescheduler.mapper.HealthRecordMapper;
+import com.suchitra.plantcarescheduler.repository.UserRepository;
 import com.suchitra.plantcarescheduler.service.HealthRecordService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/health-records")
 public class HealthRecordController {
 
     private final HealthRecordService healthRecordService;
-
     private final HealthRecordMapper healthRecordMapper;
+    private final UserRepository userRepository;
 
-    HealthRecordController(HealthRecordService healthRecordService, HealthRecordMapper healthRecordMapper) {
+    public HealthRecordController(
+            HealthRecordService healthRecordService,
+            HealthRecordMapper healthRecordMapper,
+            UserRepository userRepository) {
         this.healthRecordService = healthRecordService;
         this.healthRecordMapper = healthRecordMapper;
+        this.userRepository = userRepository;
     }
 
     // Add Health Record
     @PostMapping
     public ResponseEntity<HealthRecordResponseDTO> addHealthRecord(
-            @RequestBody HealthRecordRequestDTO requestDTO) {
+            @Valid @RequestBody HealthRecordRequestDTO requestDTO) {
 
         HealthRecord healthRecord = healthRecordMapper.toEntity(requestDTO);
 
         Plant plant = new Plant();
         plant.setId(requestDTO.getPlantId());
         healthRecord.setPlant(plant);
+
+        if (requestDTO.getAssessedById() != null) {
+            User specialist = userRepository.findById(requestDTO.getAssessedById()).orElse(null);
+            healthRecord.setSpecialist(specialist);
+        }
 
         HealthRecord savedRecord = healthRecordService.addHealthRecord(healthRecord);
 
@@ -87,7 +100,7 @@ public class HealthRecordController {
     @PutMapping("/{id}")
     public ResponseEntity<HealthRecordResponseDTO> updateHealthRecord(
             @PathVariable Long id,
-            @RequestBody HealthRecordRequestDTO requestDTO) {
+            @Valid @RequestBody HealthRecordRequestDTO requestDTO) {
 
         HealthRecord healthRecord = healthRecordMapper.toEntity(requestDTO);
 
@@ -95,13 +108,18 @@ public class HealthRecordController {
         plant.setId(requestDTO.getPlantId());
         healthRecord.setPlant(plant);
 
+        if (requestDTO.getAssessedById() != null) {
+            User specialist = userRepository.findById(requestDTO.getAssessedById()).orElse(null);
+            healthRecord.setSpecialist(specialist);
+        }
+
         HealthRecord updatedRecord = healthRecordService.updateHealthRecord(id, healthRecord);
 
         return ResponseEntity.ok(
                 healthRecordMapper.toResponseDTO(updatedRecord));
     }
 
-    //Delete Mapping
+    // Delete Mapping
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteHealthRecord(@PathVariable Long id) {
         healthRecordService.deleteHealthRecord(id);

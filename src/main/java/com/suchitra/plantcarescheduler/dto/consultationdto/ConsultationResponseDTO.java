@@ -27,5 +27,9 @@ public class ConsultationResponseDTO {
 
     private String meetingLink;
 
+    private String userName;
+
+    private String specialistName;
+
     private LocalDateTime createdDate;
 }

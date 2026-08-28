@@ -59,8 +59,14 @@ public class PlantService {
 
     // Get All Plants
     public List<Plant> getAllPlants() {
-
         return plantRepository.findAll();
+    }
+
+    // Get Plants By Owner
+    public List<Plant> getPlantsByOwner(Long ownerId) {
+        User owner = userRepository.findById(ownerId)
+                .orElseThrow(() -> new UserNotFoundException("Owner not found with id: " + ownerId));
+        return plantRepository.findByOwner(owner);
     }
 
     // Update Plant

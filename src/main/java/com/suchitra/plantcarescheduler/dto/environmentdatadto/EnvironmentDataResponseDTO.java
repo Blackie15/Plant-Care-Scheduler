@@ -16,6 +16,8 @@ public class EnvironmentDataResponseDTO {
 
     private Long plantId;
 
+    private String plantNickname;
+
     private String locationId;
 
     private String sensorId;

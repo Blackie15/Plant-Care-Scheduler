@@ -1,0 +1,330 @@
+/* Luxury Botanical Community Hub Styling */
+.community-page {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    padding-bottom: 40px;
+}
+
+/* Header */
+.community-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    background: linear-gradient(135deg, #0d2818 0%, #143621 100%);
+    border: 1px solid rgba(212, 163, 115, 0.25);
+    padding: 32px 36px;
+    border-radius: 18px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+.community-tagline {
+    display: block;
+    font-size: 11.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #d4a373;
+    margin-bottom: 6px;
+}
+
+.community-title-wrap h1 {
+    margin: 0 0 6px 0;
+    font-size: 30px;
+    font-weight: 700;
+    color: #ffffff;
+    font-family: var(--font-serif);
+}
+
+.community-title-wrap p {
+    margin: 0;
+    font-size: 14px;
+    color: #b7e4c7;
+}
+
+.create-post-btn {
+    background: #d4a373;
+    color: #081c15;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 30px;
+    font-size: 13.5px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(212, 163, 115, 0.3);
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.create-post-btn:hover {
+    background: #e9c46a;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(212, 163, 115, 0.4);
+}
+
+/* Search Bar */
+.community-search-bar {
+    width: 100%;
+}
+
+.community-search-input {
+    width: 100%;
+    padding: 14px 20px;
+    background: #0d2818;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    font-size: 14px;
+    color: #ffffff;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.community-search-input:focus {
+    border-color: #d4a373;
+    box-shadow: 0 0 0 3px rgba(212, 163, 115, 0.15);
+}
+
+.community-search-input::placeholder {
+    color: #80a58e;
+}
+
+/* Feed */
+.posts-feed {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+}
+
+.post-card {
+    background: #0d2818;
+    background: linear-gradient(135deg, rgba(13, 40, 24, 0.9) 0%, rgba(20, 54, 38, 0.8) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 24px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    transition: all 0.2s ease;
+}
+
+.post-card:hover {
+    border-color: rgba(212, 163, 115, 0.3);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
+}
+
+.post-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.post-author-wrap {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.post-author-avatar {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, #d4a373 0%, #b5835a 100%);
+    color: #081c15;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 16px;
+}
+
+.post-author-details h4 {
+    margin: 0;
+    font-size: 15px;
+    color: #ffffff;
+    font-family: var(--font-serif);
+}
+
+.post-timestamp {
+    font-size: 12px;
+    color: #80a58e;
+}
+
+.post-admin-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.post-content-body {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.post-title {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 700;
+    font-family: var(--font-serif);
+    color: #ffffff;
+}
+
+.post-description {
+    margin: 0;
+    font-size: 14.5px;
+    color: #e2e8f0;
+    line-height: 1.6;
+}
+
+.post-image-box {
+    border-radius: 12px;
+    overflow: hidden;
+    max-height: 420px;
+}
+
+.post-image-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.post-actions-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.post-interactive-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.action-pill-btn {
+    background: rgba(255, 255, 255, 0.06);
+    color: #cbd5e1;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 7px 16px;
+    border-radius: 20px;
+    font-size: 12.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.action-pill-btn:hover {
+    background: rgba(255, 255, 255, 0.12);
+    color: #ffffff;
+}
+
+.action-pill-btn.liked {
+    background: rgba(212, 163, 115, 0.2);
+    border-color: #d4a373;
+    color: #e9c46a;
+}
+
+/* Comments Section */
+.comments-section {
+    background: rgba(8, 28, 21, 0.5);
+    border-radius: 12px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.comment-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.comment-item {
+    background: rgba(20, 54, 38, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    padding: 10px 14px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.comment-author {
+    font-size: 12px;
+    font-weight: 700;
+    color: #d4a373;
+    margin-bottom: 2px;
+}
+
+.comment-text {
+    margin: 0;
+    font-size: 13px;
+    color: #e2e8f0;
+}
+
+.comment-time {
+    font-size: 11px;
+    color: #80a58e;
+    margin-top: 4px;
+}
+
+.btn-delete-comment {
+    background: transparent;
+    border: none;
+    color: #f87171;
+    cursor: pointer;
+    font-size: 13px;
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+}
+
+.btn-delete-comment:hover {
+    opacity: 1;
+}
+
+.comment-input-form {
+    display: flex;
+    gap: 10px;
+}
+
+.comment-input-form input {
+    flex: 1;
+    padding: 10px 14px;
+    background: #081c15;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: #ffffff;
+    font-size: 13px;
+    outline: none;
+}
+
+.comment-input-form input:focus {
+    border-color: #d4a373;
+}
+
+.btn-post-comment {
+    background: #d4a373;
+    color: #081c15;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-post-comment:hover:not(:disabled) {
+    background: #e9c46a;
+}
+
+@media (max-width: 768px) {
+    .community-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 18px;
+        padding: 24px;
+    }
+}

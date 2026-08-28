@@ -23,10 +23,12 @@ public class PlantController {
 
     private final PlantService plantService;
     private final PlantMapper plantMapper;
+    private final com.suchitra.plantcarescheduler.service.UserService userService;
 
-    public PlantController(PlantService plantService, PlantMapper plantMapper) {
+    public PlantController(PlantService plantService, PlantMapper plantMapper, com.suchitra.plantcarescheduler.service.UserService userService) {
         this.plantService = plantService;
         this.plantMapper = plantMapper;
+        this.userService = userService;
     }
 
     // Add Plant
@@ -55,11 +57,28 @@ public class PlantController {
         return ResponseEntity.ok(plantMapper.toResponseDTO(plant));
     }
 
-    // Get All Plants
+    // Get All Plants (defaults to authenticated user's plants, or by ownerId)
     @GetMapping
-    public ResponseEntity<List<PlantResponseDTO>> getAllPlants() {
+    public ResponseEntity<List<PlantResponseDTO>> getAllPlants(
+            @RequestParam(required = false) Long ownerId,
+            org.springframework.security.core.Authentication authentication) {
 
-        List<PlantResponseDTO> plants = plantService.getAllPlants()
+        List<Plant> plantList;
+
+        if (ownerId != null) {
+            plantList = plantService.getPlantsByOwner(ownerId);
+        } else if (authentication != null && authentication.isAuthenticated() && !authentication.getName().equals("anonymousUser")) {
+            com.suchitra.plantcarescheduler.entity.User currentUser = userService.getUserByEmail(authentication.getName());
+            if (currentUser.getRole() != null && currentUser.getRole().name().equals("ADMIN")) {
+                plantList = plantService.getAllPlants();
+            } else {
+                plantList = plantService.getPlantsByOwner(currentUser.getId());
+            }
+        } else {
+            plantList = plantService.getAllPlants();
+        }
+
+        List<PlantResponseDTO> plants = plantList
                 .stream()
                 .map(plantMapper::toResponseDTO)
                 .collect(Collectors.toList());

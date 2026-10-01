@@ -130,7 +130,7 @@ function Profile() {
                         onClick={() => setIsEditModalOpen(true)}
                         id="edit-profile-btn"
                     >
-                        Edit Profile Details
+                        Edit Profile
                     </button>
                 </div>
             </div>
@@ -192,12 +192,6 @@ function Profile() {
                         <div className="profile-card-title-group">
                             <h3>Gardener Profile & Preferences</h3>
                         </div>
-                        <button
-                            className="card-header-action-btn"
-                            onClick={() => setIsEditModalOpen(true)}
-                        >
-                            Edit Details
-                        </button>
                     </div>
 
                     <div className="profile-info-grid">

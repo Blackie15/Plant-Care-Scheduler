@@ -159,11 +159,11 @@ function Register() {
 
                     <div className="form-row">
                         <div className="form-group">
-                            <label>Location / Garden Area</label>
+                            <label>Location (City / Climate Zone)</label>
                             <input
                                 type="text"
                                 name="location"
-                                placeholder="e.g. Living Room, Balcony, City"
+                                placeholder="e.g. London, UK, Seattle (Zone 8b)"
                                 value={formData.location}
                                 onChange={handleChange}
                             />

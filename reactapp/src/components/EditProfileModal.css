@@ -1,15 +1,24 @@
 /* Luxury Botanical Edit Profile Modal Styling */
+
 .modal-overlay {
     position: fixed;
-    inset: 0;
-    background: rgba(4, 15, 11, 0.75);
-    backdrop-filter: blur(8px);
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(4, 15, 11, 0.82);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 9999;
-    padding: 20px;
-    animation: modalOverlayFadeIn 0.2s ease-out;
+    z-index: 10000;
+    padding: 24px;
+    box-sizing: border-box;
+    overflow-y: auto;
+    animation: modalOverlayFadeIn 0.22s ease-out;
 }
 
 @keyframes modalOverlayFadeIn {
@@ -23,23 +32,25 @@
 
 .edit-profile-modal {
     background: #0d2818;
-    background: linear-gradient(135deg, #0d2818 0%, #143621 100%);
-    border: 1px solid rgba(212, 163, 115, 0.3);
-    border-radius: 18px;
+    background: linear-gradient(145deg, #0d2818 0%, #133a22 100%);
+    border: 1px solid rgba(212, 163, 115, 0.35);
+    border-radius: 20px;
     width: 100%;
     max-width: 620px;
-    max-height: 90vh;
-    overflow-y: auto;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 30px rgba(212, 163, 115, 0.1);
-    animation: modalSlideIn 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    max-height: calc(100vh - 48px);
     display: flex;
     flex-direction: column;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.7), 0 0 35px rgba(212, 163, 115, 0.12);
+    animation: modalSlideIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    margin: auto;
+    position: relative;
+    overflow: hidden;
 }
 
 @keyframes modalSlideIn {
     from {
         opacity: 0;
-        transform: translateY(16px) scale(0.98);
+        transform: translateY(18px) scale(0.97);
     }
     to {
         opacity: 1;
@@ -47,12 +58,21 @@
     }
 }
 
+/* Modal Header */
 .modal-header {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
-    padding: 24px 28px 18px;
+    padding: 22px 28px 18px;
+    background: linear-gradient(135deg, #143621 0%, #1a442a 100%);
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    flex-shrink: 0;
+}
+
+.modal-header-title {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
 }
 
 .modal-header-title h2 {
@@ -61,71 +81,117 @@
     font-weight: 700;
     font-family: var(--font-serif);
     color: #ffffff;
+    letter-spacing: -0.01em;
 }
 
 .modal-subtitle {
-    margin: 4px 0 0 0;
+    margin: 0;
     font-size: 13px;
-    color: #b7e4c7;
+    color: #95d5b2;
+    line-height: 1.4;
 }
 
-.close-btn {
+.modal-close-btn {
     background: rgba(255, 255, 255, 0.08);
-    border: none;
-    width: 34px;
-    height: 34px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    width: 32px;
+    height: 32px;
     border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
     color: #cbd5e1;
-    font-size: 15px;
+    font-size: 14px;
     cursor: pointer;
-    transition: all 0.15s ease;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+    margin-left: 16px;
 }
 
-.close-btn:hover {
-    background: rgba(255, 255, 255, 0.15);
+.modal-close-btn:hover {
+    background: rgba(239, 68, 68, 0.25);
+    border-color: rgba(239, 68, 68, 0.4);
     color: #ffffff;
+    transform: scale(1.05);
 }
 
+/* Form Container */
+.edit-profile-form {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: hidden;
+}
+
+/* Scrollable Form Body */
+.modal-scroll-body {
+    padding: 22px 28px;
+    overflow-y: auto;
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+/* Custom Botanical Scrollbar */
+.modal-scroll-body::-webkit-scrollbar {
+    width: 6px;
+}
+
+.modal-scroll-body::-webkit-scrollbar-track {
+    background: rgba(8, 28, 21, 0.4);
+}
+
+.modal-scroll-body::-webkit-scrollbar-thumb {
+    background: rgba(212, 163, 115, 0.3);
+    border-radius: 4px;
+}
+
+.modal-scroll-body::-webkit-scrollbar-thumb:hover {
+    background: rgba(212, 163, 115, 0.5);
+}
+
+/* Alerts */
 .modal-alert {
-    margin: 16px 28px 0;
     padding: 12px 16px;
-    border-radius: 8px;
+    border-radius: 10px;
     font-size: 13.5px;
     font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .modal-error {
-    background: rgba(248, 113, 113, 0.15);
-    border: 1px solid rgba(248, 113, 113, 0.35);
+    background: rgba(239, 68, 68, 0.15);
+    border: 1px solid rgba(239, 68, 68, 0.35);
     color: #fca5a5;
 }
 
 .modal-success {
-    background: rgba(82, 183, 136, 0.15);
-    border: 1px solid rgba(82, 183, 136, 0.35);
+    background: rgba(82, 183, 136, 0.18);
+    border: 1px solid rgba(82, 183, 136, 0.4);
     color: #95d5b2;
 }
 
-.edit-profile-form {
-    padding: 24px 28px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+.alert-icon {
+    font-size: 15px;
 }
 
+/* Form Grid */
 .form-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 16px;
+    width: 100%;
 }
 
 .form-group {
     display: flex;
     flex-direction: column;
     gap: 6px;
+    width: 100%;
 }
 
 .form-group.full-width {
@@ -136,91 +202,228 @@
     font-size: 12.5px;
     font-weight: 600;
     color: #b7e4c7;
+    letter-spacing: 0.02em;
 }
 
 .required-mark {
     color: #e9c46a;
 }
 
-.form-input,
-.form-select {
+.form-input {
     width: 100%;
-    padding: 10px 14px;
+    padding: 11px 14px;
     background: #081c15;
     border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: 8px;
+    border-radius: 10px;
     color: #ffffff;
     font-size: 13.5px;
     outline: none;
-    transition: all 0.15s ease;
+    box-sizing: border-box;
+    transition: all 0.2s ease;
 }
 
-.form-input:focus,
+.form-input::placeholder {
+    color: #52796f;
+}
+
+.form-input:focus {
+    border-color: #d4a373;
+    background: #0b2219;
+    box-shadow: 0 0 0 3px rgba(212, 163, 115, 0.15);
+}
+
+/* Custom Select styling with SVG Chevron */
+.select-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.form-select {
+    width: 100%;
+    padding: 11px 38px 11px 14px;
+    background: #081c15;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 10px;
+    color: #ffffff;
+    font-size: 13.5px;
+    outline: none;
+    box-sizing: border-box;
+    appearance: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23d4a373' d='M1.41 0L6 4.58 10.59 0 12 1.41l-6 6-6-6z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    background-size: 11px 7px;
+}
+
 .form-select:focus {
     border-color: #d4a373;
+    background-color: #0b2219;
     box-shadow: 0 0 0 3px rgba(212, 163, 115, 0.15);
 }
 
 .form-select option {
     background: #0d2818;
     color: #ffffff;
+    padding: 8px;
 }
 
-.form-section-divider {
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
-    margin: 6px 0;
+/* Password & Security Section */
+.password-section {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 6px;
+    padding-top: 16px;
 }
 
-.form-section-title {
-    margin: 0 0 10px 0;
-    font-size: 14.5px;
-    font-weight: 700;
+.section-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+}
+
+.divider-line {
+    flex: 1;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.divider-title {
     font-family: var(--font-serif);
-    color: #ffffff;
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #d4a373;
+    letter-spacing: 0.03em;
+    white-space: nowrap;
 }
 
-.modal-actions {
+.section-hint {
+    margin: 0;
+    font-size: 12px;
+    color: #80a58e;
+    line-height: 1.4;
+}
+
+.password-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    width: 100%;
+}
+
+/* Sticky Modal Actions Footer */
+.modal-actions-footer {
     display: flex;
     justify-content: flex-end;
+    align-items: center;
     gap: 12px;
-    margin-top: 10px;
+    padding: 16px 28px;
+    background: rgba(8, 28, 21, 0.7);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    flex-shrink: 0;
 }
 
-.btn-secondary {
+.btn-cancel {
     background: rgba(255, 255, 255, 0.08);
     color: #cbd5e1;
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.14);
     padding: 10px 20px;
-    border-radius: 8px;
+    border-radius: 9px;
     font-size: 13.5px;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.15s ease;
+    transition: all 0.2s ease;
 }
 
-.btn-secondary:hover {
+.btn-cancel:hover:not(:disabled) {
     background: rgba(255, 255, 255, 0.14);
     color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.25);
 }
 
-.btn-primary {
+.btn-save {
     background: #d4a373;
     color: #081c15;
     border: none;
-    padding: 10px 22px;
-    border-radius: 8px;
+    padding: 10px 24px;
+    border-radius: 9px;
     font-size: 13.5px;
     font-weight: 700;
     cursor: pointer;
-    transition: all 0.15s ease;
+    box-shadow: 0 4px 14px rgba(212, 163, 115, 0.3);
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
 }
 
-.btn-primary:hover:not(:disabled) {
+.btn-save:hover:not(:disabled) {
     background: #e9c46a;
+    box-shadow: 0 6px 18px rgba(212, 163, 115, 0.45);
+    transform: translateY(-1px);
 }
 
-@media (max-width: 600px) {
+.btn-save:disabled,
+.btn-cancel:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.btn-spinner {
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(8, 28, 21, 0.3);
+    border-top-color: #081c15;
+    border-radius: 50%;
+    display: inline-block;
+    animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 640px) {
+    .modal-overlay {
+        padding: 14px;
+    }
+
+    .edit-profile-modal {
+        max-height: calc(100vh - 28px);
+        border-radius: 16px;
+    }
+
+    .modal-header {
+        padding: 18px 20px 14px;
+    }
+
+    .modal-header-title h2 {
+        font-size: 19px;
+    }
+
+    .modal-scroll-body {
+        padding: 18px 20px;
+    }
+
     .form-grid {
         grid-template-columns: 1fr;
+    }
+
+    .password-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .modal-actions-footer {
+        padding: 14px 20px;
     }
 }

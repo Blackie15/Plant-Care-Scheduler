@@ -51,8 +51,28 @@ function EditProfileModal({ isOpen, onClose, user, onProfileUpdated }) {
     const [error, setError] = useState("");
     const [successMessage, setSuccessMessage] = useState("");
 
+    // Lock body scroll when modal is open and handle Escape key
     useEffect(() => {
-        if (user) {
+        if (isOpen) {
+            const originalOverflow = document.body.style.overflow;
+            document.body.style.overflow = "hidden";
+
+            const handleKeyDown = (e) => {
+                if (e.key === "Escape") {
+                    onClose();
+                }
+            };
+            window.addEventListener("keydown", handleKeyDown);
+
+            return () => {
+                document.body.style.overflow = originalOverflow;
+                window.removeEventListener("keydown", handleKeyDown);
+            };
+        }
+    }, [isOpen, onClose]);
+
+    useEffect(() => {
+        if (user && isOpen) {
             setFormData({
                 username: user.username || "",
                 email: user.email || "",
@@ -87,13 +107,13 @@ function EditProfileModal({ isOpen, onClose, user, onProfileUpdated }) {
         }
 
         if (!formData.email.trim()) {
-            setError("Email cannot be blank");
+            setError("Email address cannot be blank");
             return;
         }
 
         if (formData.newPassword) {
             if (formData.newPassword.length < 6) {
-                setError("Password must be at least 6 characters long");
+                setError("New password must be at least 6 characters long");
                 return;
             }
             if (formData.newPassword !== formData.confirmPassword) {
@@ -139,170 +159,212 @@ function EditProfileModal({ isOpen, onClose, user, onProfileUpdated }) {
     };
 
     return (
-        <div className="modal-overlay" onClick={onClose}>
+        <div className="modal-overlay" onClick={onClose} role="presentation">
             <div
                 className="edit-profile-modal"
                 onClick={(e) => e.stopPropagation()}
                 role="dialog"
                 aria-modal="true"
+                aria-labelledby="edit-profile-title"
             >
-                {/* Modal Header */}
+                {/* Fixed Modal Header */}
                 <div className="modal-header">
                     <div className="modal-header-title">
-                        <h2>Edit Profile Details</h2>
-                        <p className="modal-subtitle">Update your personal information, location, and plant care preferences</p>
+                        <h2 id="edit-profile-title">Edit Profile Details</h2>
+                        <p className="modal-subtitle">Update your personal details, location zone, and botanical preferences</p>
                     </div>
-                    <button className="close-btn" onClick={onClose} aria-label="Close modal">
+                    <button
+                        className="modal-close-btn"
+                        onClick={onClose}
+                        aria-label="Close edit profile dialog"
+                        type="button"
+                    >
                         ✕
                     </button>
                 </div>
 
-                {/* Alerts */}
-                {error && <div className="modal-alert modal-error">{error}</div>}
-                {successMessage && <div className="modal-alert modal-success">{successMessage}</div>}
-
-                {/* Modal Form */}
+                {/* Modal Form with Scrollable Content and Sticky Actions */}
                 <form onSubmit={handleSubmit} className="edit-profile-form">
-                    <div className="form-grid">
-                        {/* Username */}
-                        <div className="form-group">
-                            <label htmlFor="username">Username <span className="required-mark">*</span></label>
-                            <input
-                                type="text"
-                                id="username"
-                                name="username"
-                                className="form-input"
-                                value={formData.username}
-                                onChange={handleChange}
-                                placeholder="Enter username"
-                                required
-                            />
-                        </div>
-
-                        {/* Email */}
-                        <div className="form-group">
-                            <label htmlFor="email">Email Address <span className="required-mark">*</span></label>
-                            <input
-                                type="email"
-                                id="email"
-                                name="email"
-                                className="form-input"
-                                value={formData.email}
-                                onChange={handleChange}
-                                placeholder="name@example.com"
-                                required
-                            />
-                        </div>
-
-                        {/* Location */}
-                        <div className="form-group full-width">
-                            <label htmlFor="location">Location / Climate Zone</label>
-                            <input
-                                type="text"
-                                id="location"
-                                name="location"
-                                className="form-input"
-                                value={formData.location}
-                                onChange={handleChange}
-                                placeholder="e.g., Seattle, WA (Zone 8b) or Sunny Balcony Apartment"
-                            />
-                        </div>
-
-                        {/* Gardening Experience */}
-                        <div className="form-group">
-                            <label htmlFor="gardeningExperience">Gardening Experience</label>
-                            <select
-                                id="gardeningExperience"
-                                name="gardeningExperience"
-                                className="form-select"
-                                value={formData.gardeningExperience}
-                                onChange={handleChange}
-                            >
-                                {EXPERIENCE_LEVELS.map((lvl) => (
-                                    <option key={lvl.value} value={lvl.value}>
-                                        {lvl.label}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-
-                        {/* Timezone */}
-                        <div className="form-group">
-                            <label htmlFor="timezone">Timezone</label>
-                            <select
-                                id="timezone"
-                                name="timezone"
-                                className="form-select"
-                                value={formData.timezone}
-                                onChange={handleChange}
-                            >
-                                {TIMEZONES.map((tz) => (
-                                    <option key={tz} value={tz}>
-                                        {tz}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-
-                        {/* Notification Preferences */}
-                        <div className="form-group full-width">
-                            <label htmlFor="notificationPreferences">Notification Frequency & Preferences</label>
-                            <select
-                                id="notificationPreferences"
-                                name="notificationPreferences"
-                                className="form-select"
-                                value={formData.notificationPreferences}
-                                onChange={handleChange}
-                            >
-                                {NOTIFICATION_OPTIONS.map((opt) => (
-                                    <option key={opt.value} value={opt.value}>
-                                        {opt.label}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-
-                        {/* Optional Password Change Section */}
-                        <div className="password-section full-width">
-                            <div className="section-divider">
-                                <span>Security Settings (Optional)</span>
+                    <div className="modal-scroll-body">
+                        {/* Alerts */}
+                        {error && (
+                            <div className="modal-alert modal-error" role="alert">
+                                <span className="alert-icon">⚠️</span>
+                                <span>{error}</span>
                             </div>
-                            <p className="section-hint">Leave these fields blank if you do not want to change your password.</p>
+                        )}
+                        {successMessage && (
+                            <div className="modal-alert modal-success" role="status">
+                                <span className="alert-icon">✓</span>
+                                <span>{successMessage}</span>
+                            </div>
+                        )}
 
-                            <div className="password-grid">
-                                <div className="form-group">
-                                    <label htmlFor="newPassword">New Password</label>
-                                    <input
-                                        type="password"
-                                        id="newPassword"
-                                        name="newPassword"
-                                        className="form-input"
-                                        value={formData.newPassword}
+                        <div className="form-grid">
+                            {/* Username */}
+                            <div className="form-group">
+                                <label htmlFor="username">
+                                    Username <span className="required-mark">*</span>
+                                </label>
+                                <input
+                                    type="text"
+                                    id="username"
+                                    name="username"
+                                    className="form-input"
+                                    value={formData.username}
+                                    onChange={handleChange}
+                                    placeholder="Enter username"
+                                    required
+                                    autoComplete="username"
+                                />
+                            </div>
+
+                            {/* Email */}
+                            <div className="form-group">
+                                <label htmlFor="email">
+                                    Email Address <span className="required-mark">*</span>
+                                </label>
+                                <input
+                                    type="email"
+                                    id="email"
+                                    name="email"
+                                    className="form-input"
+                                    value={formData.email}
+                                    onChange={handleChange}
+                                    placeholder="name@example.com"
+                                    required
+                                    autoComplete="email"
+                                />
+                            </div>
+
+                            {/* Location */}
+                            <div className="form-group full-width">
+                                <label htmlFor="location">
+                                    Location / Climate Zone
+                                </label>
+                                <input
+                                    type="text"
+                                    id="location"
+                                    name="location"
+                                    className="form-input"
+                                    value={formData.location}
+                                    onChange={handleChange}
+                                    placeholder="e.g. Zone 9b, Sunny Balcony, Indoor Greenhouse"
+                                />
+                            </div>
+
+                            {/* Gardening Experience */}
+                            <div className="form-group">
+                                <label htmlFor="gardeningExperience">
+                                    Gardening Experience
+                                </label>
+                                <div className="select-wrapper">
+                                    <select
+                                        id="gardeningExperience"
+                                        name="gardeningExperience"
+                                        className="form-select"
+                                        value={formData.gardeningExperience}
                                         onChange={handleChange}
-                                        placeholder="Leave blank to keep current password"
-                                        autoComplete="new-password"
-                                    />
+                                    >
+                                        {EXPERIENCE_LEVELS.map((lvl) => (
+                                            <option key={lvl.value} value={lvl.value}>
+                                                {lvl.label}
+                                            </option>
+                                        ))}
+                                    </select>
                                 </div>
+                            </div>
 
-                                <div className="form-group">
-                                    <label htmlFor="confirmPassword">Confirm New Password</label>
-                                    <input
-                                        type="password"
-                                        id="confirmPassword"
-                                        name="confirmPassword"
-                                        className="form-input"
-                                        value={formData.confirmPassword}
+                            {/* Timezone */}
+                            <div className="form-group">
+                                <label htmlFor="timezone">
+                                    Timezone
+                                </label>
+                                <div className="select-wrapper">
+                                    <select
+                                        id="timezone"
+                                        name="timezone"
+                                        className="form-select"
+                                        value={formData.timezone}
                                         onChange={handleChange}
-                                        placeholder="Repeat new password"
-                                        autoComplete="new-password"
-                                    />
+                                    >
+                                        {TIMEZONES.map((tz) => (
+                                            <option key={tz} value={tz}>
+                                                {tz}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                            </div>
+
+                            {/* Notification Preferences */}
+                            <div className="form-group full-width">
+                                <label htmlFor="notificationPreferences">
+                                    Notification Frequency & Preferences
+                                </label>
+                                <div className="select-wrapper">
+                                    <select
+                                        id="notificationPreferences"
+                                        name="notificationPreferences"
+                                        className="form-select"
+                                        value={formData.notificationPreferences}
+                                        onChange={handleChange}
+                                    >
+                                        {NOTIFICATION_OPTIONS.map((opt) => (
+                                            <option key={opt.value} value={opt.value}>
+                                                {opt.label}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                            </div>
+
+                            {/* Optional Password Change Section */}
+                            <div className="password-section full-width">
+                                <div className="section-divider">
+                                    <span className="divider-line"></span>
+                                    <span className="divider-title">Security & Password (Optional)</span>
+                                    <span className="divider-line"></span>
+                                </div>
+                                <p className="section-hint">
+                                    Leave these fields blank if you wish to keep your current password unchanged.
+                                </p>
+
+                                <div className="password-grid">
+                                    <div className="form-group">
+                                        <label htmlFor="newPassword">New Password</label>
+                                        <input
+                                            type="password"
+                                            id="newPassword"
+                                            name="newPassword"
+                                            className="form-input"
+                                            value={formData.newPassword}
+                                            onChange={handleChange}
+                                            placeholder="Min. 6 characters"
+                                            autoComplete="new-password"
+                                        />
+                                    </div>
+
+                                    <div className="form-group">
+                                        <label htmlFor="confirmPassword">Confirm New Password</label>
+                                        <input
+                                            type="password"
+                                            id="confirmPassword"
+                                            name="confirmPassword"
+                                            className="form-input"
+                                            value={formData.confirmPassword}
+                                            onChange={handleChange}
+                                            placeholder="Repeat new password"
+                                            autoComplete="new-password"
+                                        />
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    {/* Modal Actions */}
-                    <div className="modal-actions">
+                    {/* Fixed Modal Action Footer */}
+                    <div className="modal-actions-footer">
                         <button
                             type="button"
                             className="btn-cancel"
@@ -318,7 +380,7 @@ function EditProfileModal({ isOpen, onClose, user, onProfileUpdated }) {
                         >
                             {loading ? (
                                 <>
-                                    <span className="spinner"></span> Saving Changes...
+                                    <span className="btn-spinner"></span> Saving...
                                 </>
                             ) : (
                                 "Save Changes"
@@ -332,4 +394,3 @@ function EditProfileModal({ isOpen, onClose, user, onProfileUpdated }) {
 }
 
 export default EditProfileModal;
-

@@ -2,15 +2,13 @@ import { useState, useEffect, useRef } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import logoImg from "../assets/transparent-logo.png";
-import EditProfileModal from "./EditProfileModal";
 import "./Navbar.css";
 
 function Navbar() {
-    const { user, logout, refreshUser } = useAuth();
+    const { user, logout } = useAuth();
     const navigate = useNavigate();
     const [mobileOpen, setMobileOpen] = useState(false);
     const [dropdownOpen, setDropdownOpen] = useState(false);
-    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const profileRef = useRef(null);
 
     // Close dropdown on outside click or Escape key
@@ -44,11 +42,6 @@ function Navbar() {
         navigate("/login");
     };
 
-    const handleOpenEdit = () => {
-        setDropdownOpen(false);
-        setIsEditModalOpen(true);
-    };
-
     const handleGoToProfile = () => {
         setDropdownOpen(false);
         navigate("/profile");
@@ -72,7 +65,7 @@ function Navbar() {
                     </div>
                 </NavLink>
 
-                {/* Navigation Links (Clean, No Emojis) */}
+                {/* Navigation Links */}
                 <nav className={`navbar-links ${mobileOpen ? "mobile-open" : ""}`}>
                     <NavLink
                         to="/dashboard"
@@ -175,6 +168,7 @@ function Navbar() {
                                 title="Account profile & settings"
                                 aria-expanded={dropdownOpen}
                                 aria-haspopup="true"
+                                id="navbar-profile-menu-btn"
                             >
                                 <div className="user-avatar">
                                     {user.username ? user.username.charAt(0).toUpperCase() : "U"}
@@ -191,17 +185,10 @@ function Navbar() {
                             {/* Vertical Profile Dropdown Menu */}
                             {dropdownOpen && (
                                 <div className="profile-dropdown-menu" role="menu">
-                                    {/* Dropdown Header with Top Edit Button */}
+                                    {/* Dropdown Header */}
                                     <div className="dropdown-header">
                                         <div className="dropdown-header-top">
                                             <span className="dropdown-badge">{formatRole(user.role)}</span>
-                                            <button
-                                                className="top-edit-btn"
-                                                onClick={handleOpenEdit}
-                                                title="Edit personal details"
-                                            >
-                                                Edit Details
-                                            </button>
                                         </div>
 
                                         <div className="dropdown-user-info">
@@ -257,22 +244,17 @@ function Navbar() {
                                     {/* Dropdown Action Buttons */}
                                     <div className="dropdown-actions">
                                         <button
-                                            className="dropdown-action-btn edit-profile-btn"
-                                            onClick={handleOpenEdit}
-                                        >
-                                            Edit Profile Details
-                                        </button>
-
-                                        <button
                                             className="dropdown-action-btn view-profile-btn"
                                             onClick={handleGoToProfile}
+                                            id="nav-view-profile-btn"
                                         >
-                                            View Full Profile
+                                            View Full Profile →
                                         </button>
 
                                         <button
                                             className="dropdown-action-btn logout-action-btn"
                                             onClick={handleLogout}
+                                            id="nav-logout-btn"
                                         >
                                             Sign Out
                                         </button>
@@ -291,14 +273,6 @@ function Navbar() {
                     </button>
                 </div>
             </div>
-
-            {/* Edit Profile Modal */}
-            <EditProfileModal
-                isOpen={isEditModalOpen}
-                onClose={() => setIsEditModalOpen(false)}
-                user={user}
-                onProfileUpdated={() => refreshUser()}
-            />
         </header>
     );
 }

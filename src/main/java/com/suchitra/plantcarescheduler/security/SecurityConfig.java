@@ -65,10 +65,6 @@ public class SecurityConfig {
                         .requestMatchers("/api/comments/**").hasAnyRole("USER", "ADMIN", "SPECIALIST")
                         .requestMatchers("/api/notifications/**").hasAnyRole("USER", "ADMIN", "SPECIALIST")
 
-                        // Consultation
-                        .requestMatchers("/api/consultations/**")
-                        .hasAnyRole("USER", "SPECIALIST")
-
                         // Health records
                         .requestMatchers("/api/health-records/**")
                         .hasAnyRole("USER", "SPECIALIST")

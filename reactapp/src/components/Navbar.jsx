@@ -108,16 +108,6 @@ function Navbar() {
                     </NavLink>
 
                     <NavLink
-                        to="/consultations"
-                        className={({ isActive }) =>
-                            `nav-item-link ${isActive ? "active" : ""}`
-                        }
-                        onClick={() => setMobileOpen(false)}
-                    >
-                        Consultations
-                    </NavLink>
-
-                    <NavLink
                         to="/community"
                         className={({ isActive }) =>
                             `nav-item-link ${isActive ? "active" : ""}`

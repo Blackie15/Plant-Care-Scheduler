@@ -92,10 +92,4 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<Notification> notifications = new ArrayList<>();
-
-    @OneToMany(mappedBy = "user")
-    private List<Consultation> consultationsRequested = new ArrayList<>();
-
-    @OneToMany(mappedBy = "specialist")
-    private List<Consultation> consultationsAssigned = new ArrayList<>();
 }

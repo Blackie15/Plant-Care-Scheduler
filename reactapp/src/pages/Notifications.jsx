@@ -15,7 +15,7 @@ function Notifications() {
     const [error, setError] = useState("");
 
     // Tabs & Filters
-    const [activeTab, setActiveTab] = useState("ALL"); // 'ALL', 'UNREAD', 'WATER', 'CONSULTATION'
+    const [activeTab, setActiveTab] = useState("ALL"); // 'ALL', 'UNREAD', 'WATER'
 
     // Modal state for custom reminder
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -145,13 +145,6 @@ function Notifications() {
     const displayedNotifications = notifications.filter((n) => {
         if (activeTab === "UNREAD" && n.isRead) return false;
         if (activeTab === "WATER" && !waterNotifications.includes(n)) return false;
-        if (
-            activeTab === "CONSULTATION" &&
-            !n.notificationType?.toUpperCase().includes("CONSULT") &&
-            !n.notificationType?.toUpperCase().includes("HEALTH")
-        ) {
-            return false;
-        }
         return true;
     });
 
@@ -160,7 +153,6 @@ function Notifications() {
         if (t.includes("WATER")) return { tag: "Watering", styleClass: "type-tag-water" };
         if (t.includes("FERTILIZ") || t.includes("NUTRIENT")) return { tag: "Nutrition", styleClass: "type-tag-fertilize" };
         if (t.includes("HEALTH") || t.includes("DIAGNOSTIC")) return { tag: "Health", styleClass: "type-tag-health" };
-        if (t.includes("CONSULT")) return { tag: "Consultation", styleClass: "type-tag-consultation" };
         return { tag: "Care Alert", styleClass: "type-tag-general" };
     };
 
@@ -171,7 +163,7 @@ function Notifications() {
                 <div className="notifications-title-wrap">
                     <span className="notify-tagline">Care Schedule & Updates</span>
                     <h1>Alerts & Reminders</h1>
-                    <p>Stay on top of watering schedules, fertilizing reminders, and botanist appointment updates</p>
+                    <p>Stay on top of watering schedules, fertilizing reminders, and plant health updates</p>
                 </div>
 
                 <div className="header-actions-group">
@@ -233,7 +225,7 @@ function Notifications() {
                     <p>
                         {activeTab === "UNREAD"
                             ? "All caught up! You have no unread reminders."
-                            : "You don't have any alerts. When care tasks are due or consultations are updated, you will see them here."}
+                            : "You don't have any alerts. When care tasks are due or plant alerts are generated, you will see them here."}
                     </p>
                     <button className="btn-add-reminder" style={{ margin: "0 auto" }} onClick={handleOpenModal}>
                         Create Custom Plant Reminder

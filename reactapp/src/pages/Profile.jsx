@@ -4,7 +4,6 @@ import { useAuth } from "../context/AuthContext";
 import { getPlants } from "../services/plantService";
 import { getTasks } from "../services/taskService";
 import { getHealthRecords } from "../services/healthRecordService";
-import { getConsultations } from "../services/consultationService";
 import { getPosts } from "../services/communityService";
 import EditProfileModal from "../components/EditProfileModal";
 import "./Profile.css";
@@ -21,7 +20,6 @@ function Profile() {
         pendingTasksCount: 0,
         completedTasksCount: 0,
         healthRecordsCount: 0,
-        consultationsCount: 0,
         communityPostsCount: 0,
     });
 
@@ -35,13 +33,11 @@ function Profile() {
                     userPlants,
                     userTasks,
                     healthRecords,
-                    consultations,
                     posts,
                 ] = await Promise.all([
                     getPlants(user.id).catch(() => []),
                     getTasks(user.id).catch(() => []),
                     getHealthRecords().catch(() => []),
-                    getConsultations().catch(() => []),
                     getPosts().catch(() => []),
                 ]);
 
@@ -49,7 +45,6 @@ function Profile() {
                 const pendingTasks = userTasks.filter((t) => !t.isCompleted);
                 const completedTasks = userTasks.filter((t) => t.isCompleted);
                 const userHealth = healthRecords.filter((h) => plantIds.has(h.plantId));
-                const userConsults = consultations.filter((c) => c.userId === user.id || c.specialistId === user.id);
                 const userPosts = posts.filter((p) => p.userId === user.id);
 
                 setStats({
@@ -57,7 +52,6 @@ function Profile() {
                     pendingTasksCount: pendingTasks.length,
                     completedTasksCount: completedTasks.length,
                     healthRecordsCount: userHealth.length,
-                    consultationsCount: userConsults.length,
                     communityPostsCount: userPosts.length,
                 });
             } catch (err) {
@@ -170,18 +164,6 @@ function Profile() {
                     </div>
                     <span className="stat-card-sub">Active plant care schedule</span>
                 </div>
-
-                <div className="profile-stat-card">
-                    <div className="stat-card-info">
-                        <span className="stat-card-number">
-                            {loadingStats ? "..." : stats.consultationsCount}
-                        </span>
-                        <span className="stat-card-title">Consultations</span>
-                    </div>
-                    <Link to="/consultations" className="stat-card-link">
-                        Consultations →
-                    </Link>
-                </div>
             </div>
 
             {/* Main Content Two-Column Grid */}
@@ -281,15 +263,7 @@ function Profile() {
                         <Link to="/health-records" className="shortcut-item">
                             <div className="shortcut-info">
                                 <h4>Plant Health & Diagnosis</h4>
-                                <p>Track symptoms, pests, and specialist treatment plans</p>
-                            </div>
-                            <span className="shortcut-arrow">→</span>
-                        </Link>
-
-                        <Link to="/consultations" className="shortcut-item">
-                            <div className="shortcut-info">
-                                <h4>Specialist Consultations</h4>
-                                <p>Connect with expert botanists and plant doctors</p>
+                                <p>Track symptoms, pests, and treatment plans</p>
                             </div>
                             <span className="shortcut-arrow">→</span>
                         </Link>

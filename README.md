@@ -9,7 +9,7 @@
 [![Swagger UI](https://img.shields.io/badge/API%20Docs-Swagger%203-85EA2D.svg?logo=swagger)](http://localhost:8080/swagger-ui.html)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-An intelligent, full-stack plant care scheduling and botanical health tracking platform. **Plant Care Scheduler** empowers plant enthusiasts, urban gardeners, and botanical specialists to track watering/fertilization routines, log environmental telemetry, monitor plant health histories, seek expert consultations, and connect with a thriving plant community.
+An intelligent, full-stack plant care scheduling and botanical health tracking platform. **Plant Care Scheduler** empowers plant enthusiasts, urban gardeners, and botanical specialists to track watering/fertilization routines, log environmental telemetry, monitor plant health histories, and connect with a thriving plant community.
 
 ---
 
@@ -60,12 +60,8 @@ An intelligent, full-stack plant care scheduling and botanical health tracking p
 - Share plant care milestones, photos, and gardening questions.
 - Nested commenting system for peer advice and knowledge exchange.
 
-### 🧑‍🌾 7. Expert Botanical Consultations
-- Book appointment sessions with plant specialists and agronomists.
-- Track consultation lifecycle (`PENDING`, `SCHEDULED`, `COMPLETED`, `CANCELLED`) with diagnostic feedback and tailored recommendations.
-
-### 🔔 8. Real-time Notifications & Reminders
-- Instant reminders for overdue care tasks, upcoming consultation updates, and community replies.
+### 🔔 7. Real-time Notifications & Reminders
+- Instant reminders for overdue care tasks, plant health updates, and community replies.
 
 ---
 
@@ -127,12 +123,11 @@ plantcarescheduler/
 ├── src/main/java/com/suchitra/plantcarescheduler/
 │   ├── PlantcareschedulerApplication.java # Spring Boot main entry point
 │   ├── config/                           # CORS & Application configurations
-│   ├── controller/                       # REST API Controllers (11 controllers)
+│   ├── controller/                       # REST API Controllers (10 controllers)
 │   │   ├── AuthenticationController.java
 │   │   ├── CareTaskController.java
 │   │   ├── CommentController.java
 │   │   ├── CommunityPostController.java
-│   │   ├── ConsultationController.java
 │   │   ├── EnvironmentDataController.java
 │   │   ├── HealthRecordController.java
 │   │   ├── NotificationController.java
@@ -140,7 +135,7 @@ plantcarescheduler/
 │   │   ├── SpeciesController.java
 │   │   └── UserController.java
 │   ├── dto/                              # Request & Response Data Transfer Objects
-│   ├── entity/                           # JPA Data Entities (10 core entities + Role enum)
+│   ├── entity/                           # JPA Data Entities (9 core entities + Role enum)
 │   ├── mapper/                           # Entity-DTO conversion mappers
 │   ├── repository/                       # Spring Data JPA Repositories
 │   ├── security/                         # JWT filters, UserDetails, SecurityConfig
@@ -171,10 +166,9 @@ plantcarescheduler/
         │   ├── HealthRecords.jsx         # Health logs & diagnostic cards
         │   ├── Environment.jsx           # Microclimate sensor logs
         │   ├── Community.jsx             # Community posts & comments
-        │   ├── Consultations.jsx         # Specialist booking & records
         │   ├── Notifications.jsx         # Real-time alert center
         │   └── Profile.jsx               # User profile & account overview
-        └── services/                     # Axios API service clients
+        └── services/                     # API service clients
             ├── api.js                    # Base Axios instance
             ├── authService.js
             ├── plantService.js
@@ -183,7 +177,6 @@ plantcarescheduler/
             ├── healthRecordService.js
             ├── environmentService.js
             ├── communityService.js
-            ├── consultationService.js
             ├── notificationService.js
             └── userService.js
 ```
@@ -192,11 +185,11 @@ plantcarescheduler/
 
 ## 🗄️ Database & Data Models
 
-The system consists of **10 interconnected entities**:
+The system consists of **9 interconnected entities**:
 
 | Entity | Description | Key Relationships |
 | :--- | :--- | :--- |
-| **`User`** | System user, specialist, or administrator | 1-to-Many with `Plant`, `CommunityPost`, `Comment`, `Consultation`, `Notification` |
+| **`User`** | System user, specialist, or administrator | 1-to-Many with `Plant`, `CommunityPost`, `Comment`, `Notification` |
 | **`Species`** | Botanical species taxonomy & care guide | 1-to-Many with `Plant` |
 | **`Plant`** | Individual plant owned by a user | Belongs to `User` & `Species`; 1-to-Many with `CareTask`, `HealthRecord`, `EnvironmentData` |
 | **`CareTask`** | Scheduled care operation (Water, Fertilize, etc.) | Belongs to `Plant`, optionally completed by `User` |
@@ -204,7 +197,6 @@ The system consists of **10 interconnected entities**:
 | **`EnvironmentData`** | Sensor readings (Temp, Humidity, Light, Soil) | Belongs to `Plant` |
 | **`CommunityPost`** | User-generated forum post | Belongs to `User`; 1-to-Many with `Comment` |
 | **`Comment`** | Discussion responses on community posts | Belongs to `CommunityPost` & `User` |
-| **`Consultation`** | Specialist appointment and care advice | Belongs to Client `User` & Specialist `User` |
 | **`Notification`** | User alerts for tasks and system activities | Belongs to `User` |
 
 ---
@@ -273,16 +265,6 @@ The system consists of **10 interconnected entities**:
 | `POST` | `/api/community-posts` | Publish a new discussion post | Authenticated |
 | `GET` | `/api/community-posts/{id}` | Get post details and comments | Authenticated |
 | `POST` | `/api/comments` | Post a reply/comment to a discussion | Authenticated |
-
-### 🧑‍🌾 Consultations (`/api/consultations`)
-| Method | Endpoint | Description | Access |
-| :--- | :--- | :--- | :--- |
-| `GET` | `/api/consultations` | Get all consultation requests | Authenticated |
-| `POST` | `/api/consultations` | Request a new specialist consultation | Authenticated |
-| `GET` | `/api/consultations/user/{userId}` | Get consultations requested by a user | Authenticated |
-| `GET` | `/api/consultations/specialist/{id}` | Get specialist assigned consultations | Authenticated |
-| `PUT` | `/api/consultations/{id}` | Update consultation notes / status | Authenticated |
-| `DELETE` | `/api/consultations/{id}` | Cancel/delete consultation | Authenticated |
 
 ### 🔔 Notifications (`/api/notifications`)
 | Method | Endpoint | Description | Access |
@@ -393,8 +375,8 @@ The application utilizes environment variables loaded dynamically via `spring-do
 
 The application supports three role tiers defined in `Role.java`:
 
-- 👤 **`ROLE_USER`**: Regular plant owner. Can manage personal plants, complete care tasks, record health & environment metrics, request consultations, and participate in community discussions.
-- 🧑‍🌾 **`ROLE_SPECIALIST`**: Botanical specialist / agronomist. Has access to assigned consultation sessions, diagnostic logs, and specialist review panels.
+- 👤 **`ROLE_USER`**: Regular plant owner. Can manage personal plants, complete care tasks, record health & environment metrics, and participate in community discussions.
+- 🧑‍🌾 **`ROLE_SPECIALIST`**: Botanical specialist / agronomist. Has access to diagnostic logs and specialist review panels.
 - 🛡️ **`ROLE_ADMIN`**: System administrator. Has full oversight across all user profiles, species catalog, system plants, and database moderation.
 
 ---

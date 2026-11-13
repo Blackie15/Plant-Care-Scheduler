@@ -21,13 +21,17 @@ public class CommunityPostService {
 
     private final CommunityPostMapper communityPostMapper;
 
+    private final ImageStorageService imageStorageService;
+
     public CommunityPostService(CommunityPostRepository communityPostRepository,
                                 UserRepository userRepository,
-                                CommunityPostMapper communityPostMapper) {
+                                CommunityPostMapper communityPostMapper,
+                                ImageStorageService imageStorageService) {
 
         this.communityPostRepository = communityPostRepository;
         this.userRepository = userRepository;
         this.communityPostMapper = communityPostMapper;
+        this.imageStorageService = imageStorageService;
     }
 
     // Create Post
@@ -81,18 +85,26 @@ public class CommunityPostService {
 
         updatedPost.setUser(user);
 
+        String previousImage = existingPost.getImage();
+        String nextImage = updatedPost.getImage();
+
         communityPostMapper.updateEntity(existingPost, updatedPost);
 
-        return communityPostRepository.save(existingPost);
+        CommunityPost saved = communityPostRepository.save(existingPost);
+        if (previousImage != null && !previousImage.equals(nextImage)) {
+            imageStorageService.deleteIfLocalCommunityImage(previousImage);
+        }
+        return saved;
     }
 
     // Delete Post
     public void deletePost(Long id) {
 
-        if (!communityPostRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Community post not found with id: " + id);
-        }
+        CommunityPost existingPost = communityPostRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Community post not found with id: " + id));
 
-        communityPostRepository.deleteById(id);
+        String imageUrl = existingPost.getImage();
+        communityPostRepository.delete(existingPost);
+        imageStorageService.deleteIfLocalCommunityImage(imageUrl);
     }
 }

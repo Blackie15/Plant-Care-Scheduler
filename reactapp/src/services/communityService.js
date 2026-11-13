@@ -1,6 +1,7 @@
 import { getToken } from "./authService";
 
-const API_URL = "http://localhost:8080/api";
+const BACKEND_ORIGIN = "http://localhost:8080";
+const API_URL = `${BACKEND_ORIGIN}/api`;
 
 const authHeaders = () => {
     const token = getToken();
@@ -8,6 +9,44 @@ const authHeaders = () => {
         "Content-Type": "application/json",
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
     };
+};
+
+// Resolve relative backend upload paths ("/uploads/...") against BACKEND_ORIGIN while keeping full URLs intact.
+export const resolvePostImageUrl = (imagePath) => {
+    if (!imagePath) return "";
+    if (
+        imagePath.startsWith("http://") ||
+        imagePath.startsWith("https://") ||
+        imagePath.startsWith("blob:") ||
+        imagePath.startsWith("data:")
+    ) {
+        return imagePath;
+    }
+    return imagePath.startsWith("/")
+        ? `${BACKEND_ORIGIN}${imagePath}`
+        : `${BACKEND_ORIGIN}/${imagePath}`;
+};
+
+// UPLOAD POST IMAGE
+export const uploadPostImage = async (file) => {
+    const token = getToken();
+    const formData = new FormData();
+    formData.append("file", file);
+
+    // Omit Content-Type so fetch automatically sets multipart/form-data with the boundary.
+    const response = await fetch(`${API_URL}/community-posts/upload-image`, {
+        method: "POST",
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+        body: formData,
+    });
+
+    if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.message || "Failed to upload image");
+    }
+
+    const data = await response.json();
+    return data.imageUrl;
 };
 
 // GET ALL POSTS

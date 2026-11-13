@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
     getPosts,
     searchPostsByTitle,
@@ -8,9 +8,20 @@ import {
     getCommentsByPost,
     addComment,
     deleteComment,
+    uploadPostImage,
+    resolvePostImageUrl,
 } from "../services/communityService";
 import { getCurrentUser } from "../services/authService";
 import "./Community.css";
+
+const MAX_IMAGE_SIZE_BYTES = 5 * 1024 * 1024;
+const ALLOWED_IMAGE_TYPES = new Set([
+    "image/jpeg",
+    "image/jpg",
+    "image/png",
+    "image/webp",
+    "image/gif",
+]);
 
 const PRESET_PLANT_IMAGES = [
     { label: "Lush Monstera", url: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=800&q=80" },
@@ -44,6 +55,11 @@ function Community() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingPostId, setEditingPostId] = useState(null);
     const [saving, setSaving] = useState(false);
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [previewUrl, setPreviewUrl] = useState("");
+    const [fileError, setFileError] = useState("");
+    const fileInputRef = useRef(null);
+    const objectUrlRef = useRef("");
 
     const [formData, setFormData] = useState({
         title: "",
@@ -97,7 +113,34 @@ function Community() {
         }
     };
 
+    const revokeObjectPreview = () => {
+        if (objectUrlRef.current) {
+            URL.revokeObjectURL(objectUrlRef.current);
+            objectUrlRef.current = "";
+        }
+    };
+
+    useEffect(() => {
+        return () => {
+            if (objectUrlRef.current) {
+                URL.revokeObjectURL(objectUrlRef.current);
+                objectUrlRef.current = "";
+            }
+        };
+    }, []);
+
+    const clearSelectedFile = () => {
+        revokeObjectPreview();
+        setSelectedFile(null);
+        setPreviewUrl("");
+        setFileError("");
+        if (fileInputRef.current) {
+            fileInputRef.current.value = "";
+        }
+    };
+
     const handleOpenModal = (post = null) => {
+        clearSelectedFile();
         if (post) {
             setEditingPostId(post.postId);
             setFormData({
@@ -117,31 +160,73 @@ function Community() {
     };
 
     const handleCloseModal = () => {
+        clearSelectedFile();
         setIsModalOpen(false);
         setEditingPostId(null);
     };
 
     const handleFormChange = (e) => {
         const { name, value } = e.target;
+        if (name === "image") {
+            clearSelectedFile();
+        }
         setFormData({ ...formData, [name]: value });
+    };
+
+    const handleFileChange = (e) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        if (!ALLOWED_IMAGE_TYPES.has(file.type.toLowerCase())) {
+            clearSelectedFile();
+            setFileError("Unsupported file type. Please choose a JPG, PNG, WEBP, or GIF image.");
+            return;
+        }
+
+        if (file.size > MAX_IMAGE_SIZE_BYTES) {
+            clearSelectedFile();
+            setFileError("Image must be 5 MB or smaller.");
+            return;
+        }
+
+        revokeObjectPreview();
+        const objectUrl = URL.createObjectURL(file);
+        objectUrlRef.current = objectUrl;
+        setSelectedFile(file);
+        setPreviewUrl(objectUrl);
+        setFileError("");
+    };
+
+    const handlePresetSelect = (presetUrl) => {
+        clearSelectedFile();
+        setFormData({ ...formData, image: presetUrl });
+    };
+
+    const handleRemovePhoto = () => {
+        clearSelectedFile();
+        setFormData({ ...formData, image: "" });
     };
 
     const handleFormSubmit = async (e) => {
         e.preventDefault();
         setSaving(true);
         try {
+            let finalImage = formData.image.trim();
+            if (selectedFile) {
+                finalImage = await uploadPostImage(selectedFile);
+            }
+
+            const payload = {
+                title: formData.title,
+                description: formData.description,
+                image: finalImage || null,
+                userId: currentUser?.id,
+            };
+
             if (editingPostId) {
-                const payload = {
-                    ...formData,
-                    userId: currentUser?.id,
-                };
                 const updated = await updatePost(editingPostId, payload);
                 setPosts(posts.map((p) => (p.postId === editingPostId ? updated : p)));
             } else {
-                const payload = {
-                    ...formData,
-                    userId: currentUser?.id,
-                };
                 const created = await createPost(payload);
                 setPosts([created, ...posts]);
             }
@@ -342,7 +427,7 @@ function Community() {
 
                                 {post.image && (
                                     <div className="post-image-box">
-                                        <img src={post.image} alt={post.title} loading="lazy" />
+                                        <img src={resolvePostImageUrl(post.image)} alt={post.title} loading="lazy" />
                                     </div>
                                 )}
 
@@ -476,7 +561,52 @@ function Community() {
                             </div>
 
                             <div className="form-group">
-                                <label>Plant Image URL (Optional)</label>
+                                <label>Upload Photo (JPG, PNG, WEBP, GIF — max 5 MB)</label>
+                                <div className="photo-upload-box">
+                                    <input
+                                        ref={fileInputRef}
+                                        type="file"
+                                        accept="image/jpeg,image/png,image/webp,image/gif"
+                                        className="photo-file-input"
+                                        onChange={handleFileChange}
+                                    />
+                                    <div className="photo-upload-controls">
+                                        <button
+                                            type="button"
+                                            className="btn-upload-photo"
+                                            onClick={() => fileInputRef.current?.click()}
+                                        >
+                                            {selectedFile ? "Change Photo" : "Choose Photo from Device"}
+                                        </button>
+                                        {(selectedFile || formData.image) && (
+                                            <button
+                                                type="button"
+                                                className="btn-remove-photo"
+                                                onClick={handleRemovePhoto}
+                                            >
+                                                Remove Photo
+                                            </button>
+                                        )}
+                                    </div>
+                                    {selectedFile && (
+                                        <p className="photo-file-meta">
+                                            Selected: {selectedFile.name} ({(selectedFile.size / (1024 * 1024)).toFixed(2)} MB)
+                                        </p>
+                                    )}
+                                    {fileError && <p className="photo-file-error">{fileError}</p>}
+                                    {(previewUrl || formData.image.trim()) && (
+                                        <div className="photo-preview-box">
+                                            <img
+                                                src={previewUrl || resolvePostImageUrl(formData.image.trim())}
+                                                alt="Selected plant preview"
+                                            />
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+
+                            <div className="form-group">
+                                <label>Or Paste Plant Image URL (Optional)</label>
                                 <input
                                     type="text"
                                     name="image"
@@ -492,8 +622,8 @@ function Community() {
                                     {PRESET_PLANT_IMAGES.map((preset, idx) => (
                                         <span
                                             key={idx}
-                                            className={`plant-select-chip ${formData.image === preset.url ? "selected" : ""}`}
-                                            onClick={() => setFormData({ ...formData, image: preset.url })}
+                                            className={`plant-select-chip ${!selectedFile && formData.image === preset.url ? "selected" : ""}`}
+                                            onClick={() => handlePresetSelect(preset.url)}
                                         >
                                             {preset.label}
                                         </span>

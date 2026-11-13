@@ -1,11 +1,14 @@
 package com.suchitra.plantcarescheduler.controller;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.suchitra.plantcarescheduler.dto.communitypostdto.CommunityPostRequestDTO;
 import com.suchitra.plantcarescheduler.dto.communitypostdto.CommunityPostResponseDTO;
@@ -13,6 +16,7 @@ import com.suchitra.plantcarescheduler.entity.CommunityPost;
 import com.suchitra.plantcarescheduler.entity.User;
 import com.suchitra.plantcarescheduler.mapper.CommunityPostMapper;
 import com.suchitra.plantcarescheduler.service.CommunityPostService;
+import com.suchitra.plantcarescheduler.service.ImageStorageService;
 
 import jakarta.validation.Valid;
 
@@ -24,9 +28,24 @@ public class CommunityPostController {
 
     private final CommunityPostMapper communityPostMapper;
 
-    public CommunityPostController(CommunityPostService communityPostService, CommunityPostMapper communityPostMapper) {
+    private final ImageStorageService imageStorageService;
+
+    public CommunityPostController(CommunityPostService communityPostService,
+                                   CommunityPostMapper communityPostMapper,
+                                   ImageStorageService imageStorageService) {
         this.communityPostService = communityPostService;
         this.communityPostMapper = communityPostMapper;
+        this.imageStorageService = imageStorageService;
+    }
+
+    // Upload Community Post Image
+    @PostMapping(value = "/upload-image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Map<String, String>> uploadPostImage(
+            @RequestParam("file") MultipartFile file) {
+
+        String imageUrl = imageStorageService.storeCommunityImage(file);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(Map.of("imageUrl", imageUrl));
     }
 
     // Create Post

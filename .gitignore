@@ -54,3 +54,6 @@ reactapp/dist/
 # Temporary Files
 *.swp
 *.tmp
+
+# Uploaded user media
+uploads/

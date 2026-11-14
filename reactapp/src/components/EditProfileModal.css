@@ -392,6 +392,130 @@
     }
 }
 
+/* Location & Geocoding Styles */
+.location-label-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 6px;
+}
+
+.location-hint-sub {
+    font-size: 11px;
+    color: #95d5b2;
+    font-weight: normal;
+}
+
+.location-input-group {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-geo-lookup {
+    background: rgba(149, 213, 178, 0.14);
+    color: #95d5b2;
+    border: 1px solid rgba(149, 213, 178, 0.35);
+    border-radius: 10px;
+    padding: 0 14px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.btn-geo-lookup:hover:not(:disabled) {
+    background: rgba(149, 213, 178, 0.24);
+    border-color: #95d5b2;
+}
+
+.btn-geo-lookup:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.coordinates-box {
+    background: rgba(8, 28, 21, 0.6);
+    border: 1px solid rgba(212, 163, 115, 0.25);
+    border-radius: 14px;
+    padding: 14px 16px;
+    margin-top: 4px;
+}
+
+.coordinates-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.coordinates-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #e9c46a;
+    display: block;
+}
+
+.coordinates-desc {
+    margin: 2px 0 0;
+    font-size: 11px;
+    color: #b7e4c7;
+    line-height: 1.3;
+}
+
+.btn-gps-detect {
+    background: rgba(233, 196, 106, 0.16);
+    color: #e9c46a;
+    border: 1px solid rgba(233, 196, 106, 0.35);
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.2s ease;
+}
+
+.btn-gps-detect:hover:not(:disabled) {
+    background: rgba(233, 196, 106, 0.28);
+}
+
+.btn-gps-detect:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.coordinates-inputs-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.coord-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.coord-mini-label {
+    font-size: 11px;
+    color: #80a58e;
+}
+
+.geo-status-banner {
+    margin: 10px 0 0;
+    font-size: 12px;
+    color: #b7e4c7;
+    background: rgba(82, 183, 136, 0.12);
+    border: 1px solid rgba(82, 183, 136, 0.25);
+    border-radius: 8px;
+    padding: 6px 10px;
+}
+
 /* Mobile Responsiveness */
 @media (max-width: 640px) {
     .modal-overlay {

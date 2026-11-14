@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { getPlants } from "../services/plantService";
 import { getTasks } from "../services/taskService";
@@ -9,8 +9,7 @@ import EditProfileModal from "../components/EditProfileModal";
 import "./Profile.css";
 
 function Profile() {
-    const { user, refreshUser, logout } = useAuth();
-    const navigate = useNavigate();
+    const { user, refreshUser } = useAuth();
 
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [loadingStats, setLoadingStats] = useState(true);
@@ -202,14 +201,25 @@ function Profile() {
                         </div>
 
                         <div className="info-item full-width">
-                            <span className="info-label">Location / Climate Zone</span>
-                            <span className="info-value">
-                                {user?.location ? (
-                                    user.location
+                            <span className="info-label">Geographical Location & Weather Zone</span>
+                            <div className="profile-location-wrap">
+                                <span className="info-value">
+                                    {user?.location ? (
+                                        user.location
+                                    ) : (
+                                        <span className="empty-text">No location specified (Click edit to add city)</span>
+                                    )}
+                                </span>
+                                {user?.latitude != null && user?.longitude != null ? (
+                                    <span className="coordinates-badge" title="Used by Environmental & Weather-aware Care">
+                                        📍 {Number(user.latitude).toFixed(4)}°, {Number(user.longitude).toFixed(4)}°
+                                    </span>
                                 ) : (
-                                    <span className="empty-text">No location specified (Click edit to add)</span>
+                                    <span className="coordinates-missing-badge" title="Add coordinates in Edit Profile for weather features">
+                                        ⚠️ Coordinates not set
+                                    </span>
                                 )}
-                            </span>
+                            </div>
                         </div>
 
                         <div className="info-item">

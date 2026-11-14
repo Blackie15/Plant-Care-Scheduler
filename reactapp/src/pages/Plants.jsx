@@ -10,6 +10,12 @@ import {
 import { getCurrentUser } from "../services/authService";
 import "./Plants.css";
 
+const PLACEMENT_OPTIONS = [
+    { value: "Indoor", label: "Indoor (Living Room, Bedroom, Office, etc.)" },
+    { value: "Outdoor – Open area", label: "Outdoor – Open area (Exposed to natural rainfall & sun)" },
+    { value: "Outdoor – Under shelter", label: "Outdoor – Under shelter (Balcony, Covered porch, Green roof)" },
+];
+
 function Plants() {
     const [plants, setPlants] = useState([]);
     const [speciesList, setSpeciesList] = useState([]);
@@ -30,7 +36,8 @@ function Plants() {
     const [formData, setFormData] = useState({
         nickname: "",
         speciesId: "",
-        location: "Living Room",
+        placement: "Indoor",
+        location: "Indoor",
         healthStatus: "Healthy",
         potSize: '6" Terracotta',
         soilType: "Well-draining mix",
@@ -48,9 +55,11 @@ function Plants() {
         careTips: "Water when top soil is dry. Provide bright indirect light.",
     });
 
-    const loadData = async () => {
-        setLoading(true);
-        setError("");
+    const loadData = async (isInitial = false) => {
+        if (!isInitial) {
+            setLoading(true);
+            setError("");
+        }
         try {
             const userData = await getCurrentUser();
             setCurrentUser(userData);
@@ -81,7 +90,44 @@ function Plants() {
     };
 
     useEffect(() => {
-        loadData();
+        let isMounted = true;
+        (async () => {
+            try {
+                const userData = await getCurrentUser();
+                if (!isMounted) return;
+                setCurrentUser(userData);
+
+                const [plantsData, fetchedSpecies] = await Promise.all([
+                    getPlants(userData.id).catch(() => []),
+                    getSpecies().catch(() => []),
+                ]);
+                if (!isMounted) return;
+
+                setSpeciesList(fetchedSpecies);
+
+                const userPlants = userData.role === "ADMIN"
+                    ? plantsData
+                    : plantsData.filter((p) => p.ownerId === userData.id || !p.ownerId);
+
+                setPlants(userPlants);
+
+                if (fetchedSpecies.length > 0) {
+                    setFormData((prev) => (!prev.speciesId ? { ...prev, speciesId: String(fetchedSpecies[0].id) } : prev));
+                }
+            } catch (err) {
+                if (isMounted) {
+                    setError(err.message || "Failed to load plants.");
+                }
+            } finally {
+                if (isMounted) {
+                    setLoading(false);
+                }
+            }
+        })();
+
+        return () => {
+            isMounted = false;
+        };
     }, []);
 
     const handleOpenModal = (plant = null) => {
@@ -90,7 +136,8 @@ function Plants() {
             setFormData({
                 nickname: plant.nickname || "",
                 speciesId: String(plant.speciesId || (speciesList[0] ? speciesList[0].id : "")),
-                location: plant.location || "Living Room",
+                placement: plant.placement || plant.location || "Indoor",
+                location: plant.placement || plant.location || "Indoor",
                 healthStatus: plant.healthStatus || "Healthy",
                 potSize: plant.potSize || "",
                 soilType: plant.soilType || "",
@@ -103,7 +150,8 @@ function Plants() {
             setFormData({
                 nickname: "",
                 speciesId: speciesList[0] ? String(speciesList[0].id) : "OTHER",
-                location: "Living Room",
+                placement: "Indoor",
+                location: "Indoor",
                 healthStatus: "Healthy",
                 potSize: '6" Terracotta',
                 soilType: "Well-draining potting mix",
@@ -179,7 +227,8 @@ function Plants() {
                 nickname: formData.nickname.trim(),
                 ownerId: currentUser.id,
                 speciesId: finalSpeciesId,
-                location: formData.location?.trim() || null,
+                placement: formData.placement || "Indoor",
+                location: formData.placement || "Indoor",
                 healthStatus: formData.healthStatus || "Healthy",
                 potSize: formData.potSize?.trim() || null,
                 soilType: formData.soilType?.trim() || null,
@@ -219,6 +268,7 @@ function Plants() {
         const matchesSearch =
             plant.nickname?.toLowerCase().includes(searchTerm.toLowerCase()) ||
             plant.speciesCommonName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            plant.placement?.toLowerCase().includes(searchTerm.toLowerCase()) ||
             plant.location?.toLowerCase().includes(searchTerm.toLowerCase());
 
         const matchesStatus =
@@ -327,18 +377,20 @@ function Plants() {
 
                                 <div className="plant-info-grid">
                                     <div className="info-item">
-                                        <span className="info-label">Location</span>
-                                        <span className="info-val">{plant.location || "Indoor"}</span>
+                                        <span className="info-label">Placement</span>
+                                        <span className="info-val placement-pill">
+                                            {plant.placement || plant.location || "Indoor"}
+                                        </span>
+                                    </div>
+                                    <div className="info-item">
+                                        <span className="info-label">Profile Location</span>
+                                        <span className="info-val inherited-location-val" title="Geographic location from your Profile">
+                                            📍 {currentUser?.location || "Not set in Profile"}
+                                        </span>
                                     </div>
                                     <div className="info-item">
                                         <span className="info-label">Pot Size</span>
                                         <span className="info-val">{plant.potSize || '6"'}</span>
-                                    </div>
-                                    <div className="info-item">
-                                        <span className="info-label">Height</span>
-                                        <span className="info-val">
-                                            {plant.currentHeightCm ? `${plant.currentHeightCm} cm` : "N/A"}
-                                        </span>
                                     </div>
                                     <div className="info-item">
                                         <span className="info-label">Acquired</span>
@@ -510,14 +562,22 @@ function Plants() {
 
                             <div className="form-row">
                                 <div className="form-group">
-                                    <label>Location in Home / Garden</label>
-                                    <input
-                                        type="text"
-                                        name="location"
-                                        placeholder="e.g. Balcony, Living Room, Window Sill"
-                                        value={formData.location}
+                                    <label>Plant Placement *</label>
+                                    <select
+                                        name="placement"
+                                        value={formData.placement}
                                         onChange={handleFormChange}
-                                    />
+                                        required
+                                    >
+                                        {PLACEMENT_OPTIONS.map((opt) => (
+                                            <option key={opt.value} value={opt.value}>
+                                                {opt.label}
+                                            </option>
+                                        ))}
+                                    </select>
+                                    <span className="placement-helper-note">
+                                        Geographical climate is sourced from your User Profile ({currentUser?.location || "Not set in Profile"}).
+                                    </span>
                                 </div>
 
                                 <div className="form-group">

@@ -123,6 +123,14 @@ public class UserService {
             existingUser.setLocation(dto.getLocation().trim());
         }
 
+        if (dto.getLatitude() != null) {
+            existingUser.setLatitude(dto.getLatitude());
+        }
+
+        if (dto.getLongitude() != null) {
+            existingUser.setLongitude(dto.getLongitude());
+        }
+
         if (dto.getGardeningExperience() != null) {
             existingUser.setGardeningExperience(dto.getGardeningExperience().trim());
         }

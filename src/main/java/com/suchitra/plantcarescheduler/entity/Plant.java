@@ -42,6 +42,9 @@ public class Plant {
     @Column(nullable = false)
     private String nickname;
 
+    @Column(length = 50)
+    private String placement;
+
     @Column(length = 200)
     private String location;
 

@@ -26,6 +26,10 @@ public class UserResponseDTO {
 
     private String location;
 
+    private Double latitude;
+
+    private Double longitude;
+
     private String gardeningExperience;
 
     private String timezone;

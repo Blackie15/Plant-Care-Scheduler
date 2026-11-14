@@ -33,21 +33,37 @@ const NOTIFICATION_OPTIONS = [
     { value: "Minimal notifications", label: "Minimal (Vital account & system updates only)" },
 ];
 
+const buildFormData = (u) => ({
+    username: u?.username || "",
+    email: u?.email || "",
+    location: u?.location || "",
+    latitude: u?.latitude !== undefined && u?.latitude !== null ? String(u.latitude) : "",
+    longitude: u?.longitude !== undefined && u?.longitude !== null ? String(u.longitude) : "",
+    gardeningExperience: u?.gardeningExperience || "Beginner",
+    timezone: u?.timezone || "Asia/Kolkata (IST +5:30)",
+    notificationPreferences: u?.notificationPreferences || "All notifications (Instant reminders)",
+    newPassword: "",
+    confirmPassword: "",
+});
+
 function EditProfileModal({ isOpen, onClose, user, onProfileUpdated }) {
     const { updateUserState } = useAuth();
 
-    const [formData, setFormData] = useState({
-        username: "",
-        email: "",
-        location: "",
-        gardeningExperience: "Beginner",
-        timezone: "Asia/Kolkata (IST +5:30)",
-        notificationPreferences: "All notifications (Instant reminders)",
-        newPassword: "",
-        confirmPassword: "",
-    });
+    const [formData, setFormData] = useState(() => buildFormData(user));
+    const [prevUser, setPrevUser] = useState(user);
+    const [prevOpen, setPrevOpen] = useState(isOpen);
+
+    if (isOpen !== prevOpen || user !== prevUser) {
+        setPrevOpen(isOpen);
+        setPrevUser(user);
+        if (isOpen && user) {
+            setFormData(buildFormData(user));
+        }
+    }
 
     const [loading, setLoading] = useState(false);
+    const [geoLoading, setGeoLoading] = useState(false);
+    const [geoStatus, setGeoStatus] = useState("");
     const [error, setError] = useState("");
     const [successMessage, setSuccessMessage] = useState("");
 
@@ -71,22 +87,77 @@ function EditProfileModal({ isOpen, onClose, user, onProfileUpdated }) {
         }
     }, [isOpen, onClose]);
 
-    useEffect(() => {
-        if (user && isOpen) {
-            setFormData({
-                username: user.username || "",
-                email: user.email || "",
-                location: user.location || "",
-                gardeningExperience: user.gardeningExperience || "Beginner",
-                timezone: user.timezone || "Asia/Kolkata (IST +5:30)",
-                notificationPreferences: user.notificationPreferences || "All notifications (Instant reminders)",
-                newPassword: "",
-                confirmPassword: "",
-            });
-            setError("");
-            setSuccessMessage("");
+    const handleDetectGpsLocation = () => {
+        if (!navigator.geolocation) {
+            setError("Geolocation is not supported by your browser.");
+            return;
         }
-    }, [user, isOpen]);
+
+        setGeoLoading(true);
+        setGeoStatus("Detecting GPS coordinates...");
+        setError("");
+        navigator.geolocation.getCurrentPosition(
+            (pos) => {
+                const lat = Number(pos.coords.latitude.toFixed(6));
+                const lng = Number(pos.coords.longitude.toFixed(6));
+                setFormData((prev) => ({
+                    ...prev,
+                    latitude: String(lat),
+                    longitude: String(lng),
+                }));
+                setGeoLoading(false);
+                setGeoStatus(`GPS detected: ${lat}, ${lng}`);
+            },
+            (err) => {
+                setGeoLoading(false);
+                setGeoStatus("");
+                setError(`Could not detect location: ${err.message}. You can enter coordinates manually or search by city.`);
+            },
+            { timeout: 10000, enableHighAccuracy: true }
+        );
+    };
+
+    const handleLookupCoordinates = async () => {
+        const query = formData.location.trim();
+        if (!query) {
+            setError("Please enter a city or region in Location first to look up coordinates.");
+            return;
+        }
+
+        setGeoLoading(true);
+        setGeoStatus(`Searching coordinates for "${query}"...`);
+        setError("");
+        try {
+            const resp = await fetch(
+                `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(query)}&count=1&language=en&format=json`
+            );
+            if (!resp.ok) {
+                throw new Error("Geocoding service unavailable.");
+            }
+            const data = await resp.json();
+            if (data.results && data.results.length > 0) {
+                const result = data.results[0];
+                const lat = Number(result.latitude.toFixed(6));
+                const lng = Number(result.longitude.toFixed(6));
+                const resolvedName = [result.name, result.admin1, result.country].filter(Boolean).join(", ");
+                setFormData((prev) => ({
+                    ...prev,
+                    location: resolvedName || prev.location,
+                    latitude: String(lat),
+                    longitude: String(lng),
+                }));
+                setGeoStatus(`Coordinates found: ${resolvedName} (${lat}, ${lng})`);
+            } else {
+                setGeoStatus("");
+                setError(`No geographical coordinates found for "${query}". Try entering a major city name.`);
+            }
+        } catch (err) {
+            setGeoStatus("");
+            setError(`Geocoding error: ${err.message}`);
+        } finally {
+            setGeoLoading(false);
+        }
+    };
 
     if (!isOpen) return null;
 
@@ -129,6 +200,8 @@ function EditProfileModal({ isOpen, onClose, user, onProfileUpdated }) {
                 username: formData.username.trim(),
                 email: formData.email.trim(),
                 location: formData.location.trim(),
+                latitude: formData.latitude !== "" && formData.latitude !== null ? Number(formData.latitude) : null,
+                longitude: formData.longitude !== "" && formData.longitude !== null ? Number(formData.longitude) : null,
                 gardeningExperience: formData.gardeningExperience,
                 timezone: formData.timezone,
                 notificationPreferences: formData.notificationPreferences,
@@ -237,20 +310,82 @@ function EditProfileModal({ isOpen, onClose, user, onProfileUpdated }) {
                                 />
                             </div>
 
-                            {/* Location */}
+                            {/* Location (City / Region) */}
                             <div className="form-group full-width">
-                                <label htmlFor="location">
-                                    Location / Climate Zone
-                                </label>
-                                <input
-                                    type="text"
-                                    id="location"
-                                    name="location"
-                                    className="form-input"
-                                    value={formData.location}
-                                    onChange={handleChange}
-                                    placeholder="e.g. Zone 9b, Sunny Balcony, Indoor Greenhouse"
-                                />
+                                <div className="location-label-row">
+                                    <label htmlFor="location">
+                                        Geographical Location (City / Region)
+                                    </label>
+                                    <span className="location-hint-sub">Centralized location for all your plants & weather forecasts</span>
+                                </div>
+                                <div className="location-input-group">
+                                    <input
+                                        type="text"
+                                        id="location"
+                                        name="location"
+                                        className="form-input"
+                                        value={formData.location}
+                                        onChange={handleChange}
+                                        placeholder="e.g. Chennai, London, New York, Melbourne"
+                                    />
+                                    <button
+                                        type="button"
+                                        className="btn-geo-lookup"
+                                        onClick={handleLookupCoordinates}
+                                        disabled={geoLoading || !formData.location.trim()}
+                                        title="Lookup GPS Coordinates for this city"
+                                    >
+                                        🔍 Lookup Coords
+                                    </button>
+                                </div>
+                            </div>
+
+                            {/* GPS Coordinates Section */}
+                            <div className="form-group full-width coordinates-box">
+                                <div className="coordinates-header">
+                                    <div>
+                                        <label className="coordinates-title">GPS Coordinates (Latitude & Longitude)</label>
+                                        <p className="coordinates-desc">Required for real-time weather forecasts and rain-aware care recommendations</p>
+                                    </div>
+                                    <button
+                                        type="button"
+                                        className="btn-gps-detect"
+                                        onClick={handleDetectGpsLocation}
+                                        disabled={geoLoading}
+                                        title="Auto-detect using browser geolocation"
+                                    >
+                                        📍 Detect My GPS
+                                    </button>
+                                </div>
+                                <div className="coordinates-inputs-row">
+                                    <div className="coord-field">
+                                        <label htmlFor="latitude" className="coord-mini-label">Latitude (°N/°S)</label>
+                                        <input
+                                            type="number"
+                                            step="any"
+                                            id="latitude"
+                                            name="latitude"
+                                            className="form-input"
+                                            value={formData.latitude}
+                                            onChange={handleChange}
+                                            placeholder="e.g. 13.0827"
+                                        />
+                                    </div>
+                                    <div className="coord-field">
+                                        <label htmlFor="longitude" className="coord-mini-label">Longitude (°E/°W)</label>
+                                        <input
+                                            type="number"
+                                            step="any"
+                                            id="longitude"
+                                            name="longitude"
+                                            className="form-input"
+                                            value={formData.longitude}
+                                            onChange={handleChange}
+                                            placeholder="e.g. 80.2707"
+                                        />
+                                    </div>
+                                </div>
+                                {geoStatus && <p className="geo-status-banner">{geoStatus}</p>}
                             </div>
 
                             {/* Gardening Experience */}

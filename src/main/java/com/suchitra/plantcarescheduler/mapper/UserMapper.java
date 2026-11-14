@@ -20,6 +20,8 @@ public class UserMapper {
         user.setPasswordHash(requestDTO.getPassword());
         user.setRole(Role.valueOf(requestDTO.getRole().toUpperCase()));
         user.setLocation(requestDTO.getLocation());
+        user.setLatitude(requestDTO.getLatitude());
+        user.setLongitude(requestDTO.getLongitude());
         user.setGardeningExperience(requestDTO.getGardeningExperience());
         user.setTimezone(requestDTO.getTimezone());
         user.setNotificationPreferences(requestDTO.getNotificationPreferences());
@@ -39,6 +41,8 @@ public class UserMapper {
         responseDTO.setIsActive(user.getIsActive());
         responseDTO.setEmailVerified(user.getEmailVerified());
         responseDTO.setLocation(user.getLocation());
+        responseDTO.setLatitude(user.getLatitude());
+        responseDTO.setLongitude(user.getLongitude());
         responseDTO.setGardeningExperience(user.getGardeningExperience());
         responseDTO.setTimezone(user.getTimezone());
         responseDTO.setNotificationPreferences(user.getNotificationPreferences());
@@ -64,6 +68,12 @@ public class UserMapper {
         }
         if (updatedUser.getLocation() != null) {
             existingUser.setLocation(updatedUser.getLocation());
+        }
+        if (updatedUser.getLatitude() != null) {
+            existingUser.setLatitude(updatedUser.getLatitude());
+        }
+        if (updatedUser.getLongitude() != null) {
+            existingUser.setLongitude(updatedUser.getLongitude());
         }
         if (updatedUser.getGardeningExperience() != null) {
             existingUser.setGardeningExperience(updatedUser.getGardeningExperience());

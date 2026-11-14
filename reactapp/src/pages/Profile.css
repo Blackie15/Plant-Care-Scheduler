@@ -286,6 +286,34 @@
     font-style: italic;
 }
 
+.profile-location-wrap {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.coordinates-badge {
+    background: rgba(82, 183, 136, 0.18);
+    color: #95d5b2;
+    border: 1px solid rgba(82, 183, 136, 0.35);
+    border-radius: 999px;
+    padding: 3px 10px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+}
+
+.coordinates-missing-badge {
+    background: rgba(231, 111, 81, 0.16);
+    color: #f4a261;
+    border: 1px solid rgba(231, 111, 81, 0.35);
+    border-radius: 999px;
+    padding: 3px 10px;
+    font-size: 11px;
+    font-weight: 500;
+}
+
 /* Shortcuts */
 .profile-shortcuts-list {
     display: flex;

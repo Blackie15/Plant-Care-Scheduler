@@ -18,6 +18,8 @@ public class PlantRequestDTO {
     @NotBlank(message = "Plant nickname is required")
     private String nickname;
 
+    private String placement;
+
     private String location;
 
     private LocalDate acquisitionDate;

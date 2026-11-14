@@ -15,7 +15,8 @@ public class PlantMapper {
         Plant plant = new Plant();
 
         plant.setNickname(requestDTO.getNickname());
-        plant.setLocation(requestDTO.getLocation());
+        plant.setPlacement(requestDTO.getPlacement());
+        plant.setLocation(requestDTO.getLocation() != null ? requestDTO.getLocation() : requestDTO.getPlacement());
         plant.setAcquisitionDate(requestDTO.getAcquisitionDate());
         plant.setCurrentHeightCm(requestDTO.getCurrentHeightCm());
         plant.setCurrentWidthCm(requestDTO.getCurrentWidthCm());
@@ -40,6 +41,7 @@ public class PlantMapper {
 
         responseDTO.setId(plant.getId());
         responseDTO.setNickname(plant.getNickname());
+        responseDTO.setPlacement(plant.getPlacement());
         responseDTO.setLocation(plant.getLocation());
         responseDTO.setAcquisitionDate(plant.getAcquisitionDate());
         responseDTO.setCurrentHeightCm(plant.getCurrentHeightCm());
@@ -72,6 +74,9 @@ public class PlantMapper {
     public void updateEntity(Plant existingPlant, Plant updatedPlant) {
 
         existingPlant.setNickname(updatedPlant.getNickname());
+        if (updatedPlant.getPlacement() != null) {
+            existingPlant.setPlacement(updatedPlant.getPlacement());
+        }
         existingPlant.setLocation(updatedPlant.getLocation());
         existingPlant.setAcquisitionDate(updatedPlant.getAcquisitionDate());
         existingPlant.setCurrentHeightCm(updatedPlant.getCurrentHeightCm());

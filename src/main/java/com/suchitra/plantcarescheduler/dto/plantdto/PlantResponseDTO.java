@@ -17,6 +17,8 @@ public class PlantResponseDTO {
 
     private String nickname;
 
+    private String placement;
+
     private String location;
 
     private LocalDate acquisitionDate;

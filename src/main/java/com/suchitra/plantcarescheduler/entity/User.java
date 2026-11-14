@@ -60,6 +60,12 @@ public class User {
     @Column(length = 200)
     private String location;
 
+    @Column(name = "latitude")
+    private Double latitude;
+
+    @Column(name = "longitude")
+    private Double longitude;
+
     @Column(name = "gardening_experience")
     private String gardeningExperience;
 

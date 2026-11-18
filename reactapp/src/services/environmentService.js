@@ -10,6 +10,30 @@ const authHeaders = () => {
     };
 };
 
+// GET LIVE WEATHER & RECOMMENDATIONS
+export const getLiveWeather = async (lat = null, lng = null) => {
+    let url = `${API_URL}/weather`;
+    const params = new URLSearchParams();
+    if (lat != null && lng != null) {
+        params.append("lat", lat);
+        params.append("lng", lng);
+    }
+    if ([...params].length > 0) {
+        url += `?${params.toString()}`;
+    }
+
+    const response = await fetch(url, {
+        method: "GET",
+        headers: authHeaders(),
+    });
+
+    if (!response.ok) {
+        throw new Error(`Failed to fetch weather telemetry (HTTP ${response.status})`);
+    }
+
+    return await response.json();
+};
+
 export const getAllEnvironmentData = async () => {
     const response = await fetch(API_URL, {
         method: "GET",

@@ -124,7 +124,7 @@ function Navbar() {
                         }
                         onClick={() => setMobileOpen(false)}
                     >
-                        Sensors
+                        Environment & Weather
                     </NavLink>
 
                     <NavLink

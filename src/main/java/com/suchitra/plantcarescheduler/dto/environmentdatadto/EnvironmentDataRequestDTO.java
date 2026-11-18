@@ -13,7 +13,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class EnvironmentDataRequestDTO {
 
-    @NotNull(message = "Plant ID is required")
     private Long plantId;
 
     private String locationId;
@@ -23,6 +22,10 @@ public class EnvironmentDataRequestDTO {
     private BigDecimal temperatureCelsius;
 
     private Integer humidityPercentage;
+
+    private BigDecimal rainfallMm;
+
+    private String weatherCondition;
 
     private Integer lightLevelLux;
 

@@ -30,12 +30,14 @@ public class EnvironmentDataService {
     // Add Environment Data
     public EnvironmentData addEnvironmentData(EnvironmentData environmentData) {
 
-        Long plantId = environmentData.getPlant().getId();
-
-        Plant plant = plantRepository.findById(plantId)
-                .orElseThrow(() -> new ResourceNotFoundException("Plant not found with id: " + plantId));
-
-        environmentData.setPlant(plant);
+        if (environmentData.getPlant() != null && environmentData.getPlant().getId() != null) {
+            Long plantId = environmentData.getPlant().getId();
+            Plant plant = plantRepository.findById(plantId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Plant not found with id: " + plantId));
+            environmentData.setPlant(plant);
+        } else {
+            environmentData.setPlant(null);
+        }
 
         return environmentDataRepository.save(environmentData);
     }
@@ -66,12 +68,14 @@ public class EnvironmentDataService {
         EnvironmentData existingData = environmentDataRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Environment data not found with id: " + id));
 
-        Long plantId = updatedData.getPlant().getId();
-
-        Plant plant = plantRepository.findById(plantId)
-                .orElseThrow(() -> new ResourceNotFoundException("Plant not found with id: " + plantId));
-
-        updatedData.setPlant(plant);
+        if (updatedData.getPlant() != null && updatedData.getPlant().getId() != null) {
+            Long plantId = updatedData.getPlant().getId();
+            Plant plant = plantRepository.findById(plantId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Plant not found with id: " + plantId));
+            updatedData.setPlant(plant);
+        } else {
+            updatedData.setPlant(null);
+        }
 
         environmentDataMapper.updateEntity(existingData, updatedData);
 

@@ -18,6 +18,8 @@ public class EnvironmentDataMapper {
         environmentData.setSensorId(requestDTO.getSensorId());
         environmentData.setTemperatureCelsius(requestDTO.getTemperatureCelsius());
         environmentData.setHumidityPercentage(requestDTO.getHumidityPercentage());
+        environmentData.setRainfallMm(requestDTO.getRainfallMm());
+        environmentData.setWeatherCondition(requestDTO.getWeatherCondition());
         environmentData.setLightLevelLux(requestDTO.getLightLevelLux());
         environmentData.setSoilMoisturePercentage(requestDTO.getSoilMoisturePercentage());
         environmentData.setPhLevel(requestDTO.getPhLevel());
@@ -41,6 +43,8 @@ public class EnvironmentDataMapper {
         responseDTO.setSensorId(environmentData.getSensorId());
         responseDTO.setTemperatureCelsius(environmentData.getTemperatureCelsius());
         responseDTO.setHumidityPercentage(environmentData.getHumidityPercentage());
+        responseDTO.setRainfallMm(environmentData.getRainfallMm());
+        responseDTO.setWeatherCondition(environmentData.getWeatherCondition());
         responseDTO.setLightLevelLux(environmentData.getLightLevelLux());
         responseDTO.setSoilMoisturePercentage(environmentData.getSoilMoisturePercentage());
         responseDTO.setPhLevel(environmentData.getPhLevel());
@@ -58,6 +62,8 @@ public class EnvironmentDataMapper {
         existingData.setSensorId(updatedData.getSensorId());
         existingData.setTemperatureCelsius(updatedData.getTemperatureCelsius());
         existingData.setHumidityPercentage(updatedData.getHumidityPercentage());
+        existingData.setRainfallMm(updatedData.getRainfallMm());
+        existingData.setWeatherCondition(updatedData.getWeatherCondition());
         existingData.setLightLevelLux(updatedData.getLightLevelLux());
         existingData.setSoilMoisturePercentage(updatedData.getSoilMoisturePercentage());
         existingData.setPhLevel(updatedData.getPhLevel());

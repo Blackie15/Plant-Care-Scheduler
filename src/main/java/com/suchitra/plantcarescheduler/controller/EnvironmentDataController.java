@@ -19,11 +19,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.suchitra.plantcarescheduler.dto.environmentdatadto.EnvironmentDataRequestDTO;
 import com.suchitra.plantcarescheduler.dto.environmentdatadto.EnvironmentDataResponseDTO;
+import com.suchitra.plantcarescheduler.dto.weatherdto.WeatherResponseDTO;
 import com.suchitra.plantcarescheduler.entity.EnvironmentData;
 import com.suchitra.plantcarescheduler.entity.Plant;
 import com.suchitra.plantcarescheduler.mapper.EnvironmentDataMapper;
 import com.suchitra.plantcarescheduler.repository.PlantRepository;
 import com.suchitra.plantcarescheduler.service.EnvironmentDataService;
+import com.suchitra.plantcarescheduler.service.WeatherService;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import jakarta.validation.Valid;
 
@@ -41,6 +45,21 @@ public class EnvironmentDataController {
     @Autowired
     private PlantRepository plantRepository;
 
+    @Autowired
+    private WeatherService weatherService;
+
+    // Get Live Weather & Recommendations based on User Profile coordinates
+    @GetMapping("/weather")
+    public ResponseEntity<WeatherResponseDTO> getLiveWeather(
+            Authentication authentication,
+            @RequestParam(required = false) Double lat,
+            @RequestParam(required = false) Double lng) {
+
+        String userEmail = authentication != null ? authentication.getName() : null;
+        WeatherResponseDTO weather = weatherService.getWeatherForUser(userEmail, lat, lng);
+        return ResponseEntity.ok(weather);
+    }
+
     // Add Environment Data
     @PostMapping
     public ResponseEntity<EnvironmentDataResponseDTO> addEnvironmentData(
@@ -48,10 +67,13 @@ public class EnvironmentDataController {
 
         EnvironmentData environmentData = environmentDataMapper.toEntity(requestDTO);
 
-        Plant plant = plantRepository.findById(requestDTO.getPlantId())
-                .orElseThrow(() -> new RuntimeException("Plant not found"));
-
-        environmentData.setPlant(plant);
+        if (requestDTO.getPlantId() != null) {
+            Plant plant = plantRepository.findById(requestDTO.getPlantId())
+                    .orElseThrow(() -> new RuntimeException("Plant not found with id: " + requestDTO.getPlantId()));
+            environmentData.setPlant(plant);
+        } else {
+            environmentData.setPlant(null);
+        }
 
         EnvironmentData savedData = environmentDataService.addEnvironmentData(environmentData);
 
@@ -108,10 +130,13 @@ public class EnvironmentDataController {
 
         EnvironmentData environmentData = environmentDataMapper.toEntity(requestDTO);
 
-        Plant plant = plantRepository.findById(requestDTO.getPlantId())
-                .orElseThrow(() -> new RuntimeException("Plant not found"));
-
-        environmentData.setPlant(plant);
+        if (requestDTO.getPlantId() != null) {
+            Plant plant = plantRepository.findById(requestDTO.getPlantId())
+                    .orElseThrow(() -> new RuntimeException("Plant not found with id: " + requestDTO.getPlantId()));
+            environmentData.setPlant(plant);
+        } else {
+            environmentData.setPlant(null);
+        }
 
         EnvironmentData updatedData =
                 environmentDataService.updateEnvironmentData(id, environmentData);

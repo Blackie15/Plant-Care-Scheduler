@@ -54,6 +54,12 @@ public class EnvironmentData {
     @Column(name = "ph_level", precision = 4, scale = 2)
     private BigDecimal phLevel;
 
+    @Column(name = "rainfall_mm", precision = 5, scale = 2)
+    private BigDecimal rainfallMm;
+
+    @Column(name = "weather_condition")
+    private String weatherCondition;
+
     @NotNull(message = "Recorded date is required")
     @Column(name = "recorded_date", nullable = false)
     private LocalDateTime recordedDate;
@@ -62,7 +68,7 @@ public class EnvironmentData {
     private String dataSource;
     
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "plant_id", nullable = false)
+    @JoinColumn(name = "plant_id", nullable = true)
     @JsonIgnoreProperties({"environmentData"})
     private Plant plant;
 }

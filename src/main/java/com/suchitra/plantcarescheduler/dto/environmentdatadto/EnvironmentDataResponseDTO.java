@@ -26,6 +26,10 @@ public class EnvironmentDataResponseDTO {
 
     private Integer humidityPercentage;
 
+    private BigDecimal rainfallMm;
+
+    private String weatherCondition;
+
     private Integer lightLevelLux;
 
     private Integer soilMoisturePercentage;
